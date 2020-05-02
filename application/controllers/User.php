@@ -35,7 +35,7 @@ class User extends CI_Controller {
       'email' => $email
     ))->result_array();
     if (sizeof($users) > 0) {
-      $user = $users[$i];
+      $user = $users[0];
       if ($user['password'] == $password) {
         echo json_encode(array(
           'response_code' => 1,
