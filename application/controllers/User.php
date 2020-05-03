@@ -19,7 +19,8 @@ class User extends CI_Controller {
       'parent_name' => $parentName,
       'phone' => $phone,
       'last_vaccine_date' => $lastVaccineDate,
-      'last_vaccine_id' => $lastVaccineID
+      'last_vaccine_id' => $lastVaccineID,
+      'registration_complete' => 1
     ));
   }
   
