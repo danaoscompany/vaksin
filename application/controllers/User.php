@@ -92,7 +92,8 @@ class User extends CI_Controller {
       if ($user['password'] == $password) {
         echo json_encode(array(
           'response_code' => 1,
-          'user_id' => intval($user['id'])
+          'user_id' => intval($user['id']),
+          'registration_complete' => intval($user['registration_complete'])
         ));
       } else {
         echo json_encode(array(
