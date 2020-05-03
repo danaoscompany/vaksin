@@ -2,6 +2,27 @@
 
 class User extends CI_Controller {
   
+  public function complete_data() {
+    $userID = intval($this->input->post('user_id'));
+    $name = $this->input->post('name');
+    $address = $this->input->post('address');
+    $age = intval($this->input->post('age'));
+    $parentName = $this->input->post('parent_name');
+    $phone = $this->input->post('phone');
+    $lastVaccineDate = $this->input->post('last_vaccine_date');
+    $lastVaccineID = intval($this->input->post('last_vaccine_id'));
+    $this->db->where('id', $userID);
+    $this->db->update('users', array(
+      'name' => $name,
+      'address' => $address,
+      'age' => $age,
+      'parent_name' => $parentName,
+      'phone' => $phone,
+      'last_vaccine_date' => $lastVaccineDate,
+      'last_vaccine_id' => $lastVaccineID
+    ));
+  }
+  
   public function use_vaccine() {
     $userID = intval($this->input->post('user_id'));
     $slotID = intval($this->input->post('slot_id'));
