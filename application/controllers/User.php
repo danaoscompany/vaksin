@@ -11,8 +11,12 @@ class User extends CI_Controller {
     $phone = $this->input->post('phone');
     $lastVaccineDate = $this->input->post('last_vaccine_date');
     $lastVaccineID = intval($this->input->post('last_vaccine_id'));
+    $registrationDate = $this->input->post('registration_date');
     $this->db->where('id', $userID);
+    $lastNoAnggota = intval($this->db->query('SELECT * FROM `users` ORDER BY `no_anggota` DESC LIMIT 1')->row_array()['no_anggota'])+1;
+    $noAnggota = str_pad('' . $lastNoAnggota, 4, '0', STR_PAD_LEFT);
     $this->db->update('users', array(
+      'no_anggota' => $noAnggota,
       'name' => $name,
       'address' => $address,
       'age' => $age,
@@ -20,7 +24,11 @@ class User extends CI_Controller {
       'phone' => $phone,
       'last_vaccine_date' => $lastVaccineDate,
       'last_vaccine_id' => $lastVaccineID,
+      'registration_date' => $registrationDate,
       'registration_complete' => 1
+    ));
+    echo json_encode(array(
+      'no_anggota' => $noAnggota
     ));
   }
   
