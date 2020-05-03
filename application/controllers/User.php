@@ -2,6 +2,29 @@
 
 class User extends CI_Controller {
   
+  public function use_vaccine() {
+    $userID = intval($this->input->post('user_id'));
+    $slotID = intval($this->input->post('slot_id'));
+    $vaccines = $this->input->post('vaccines');
+    $usedVaccines = $this->db->get_where('used_vaccines', array(
+      'user_id' => $userID,
+      'slot_id' => $slotID
+    ))->result_array();
+    if (sizeof($usedVaccines) > 0) {
+      echo -1;
+    } else {
+      $this->db->insert('used_vaccines', array(
+        'user_id' => $userID,
+        'slot_id' => $slotID,
+        'vaccines' => $vaccines
+      ));
+      $this->db->where('id', $slotID);
+      $this->db->set('slots_used', 'slots_used+1', FALSE);
+      $this->db->update('slots');
+      echo 1;
+    }
+  }
+  
   public function signup() {
     $email = $this->input->post('email');
     $password = $this->input->post('password');
