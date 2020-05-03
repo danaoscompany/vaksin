@@ -9,7 +9,7 @@ class Main extends CI_Controller {
   }
   
   public function query() {
-    $cmd = $_POST['cmd'];
+    $cmd = $this->input->post('cmd');
     echo json_encode($this->db->query($cmd)->result_array());
   }
   
