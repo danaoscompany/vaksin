@@ -2,16 +2,21 @@
 
 class User extends CI_Controller {
   
+  private function post($name) {
+    $obj = json_decode(file_get_contents('php://input'), true);
+    return $obj[$name];
+  }
+  
   public function complete_data() {
-    $userID = intval($this->input->post('user_id'));
-    $name = $this->input->post('name');
-    $address = $this->input->post('address');
-    $age = intval($this->input->post('age'));
-    $parentName = $this->input->post('parent_name');
-    $phone = $this->input->post('phone');
-    $lastVaccineDate = $this->input->post('last_vaccine_date');
-    $lastVaccineID = intval($this->input->post('last_vaccine_id'));
-    $registrationDate = $this->input->post('registration_date');
+    $userID = intval(post('user_id'));
+    $name = post('name');
+    $address = post('address');
+    $age = intval(post('age'));
+    $parentName = post('parent_name');
+    $phone = post('phone');
+    $lastVaccineDate = post('last_vaccine_date');
+    $lastVaccineID = intval(post('last_vaccine_id'));
+    $registrationDate = post('registration_date');
     $this->db->where('id', $userID);
     $lastNoAnggota = intval($this->db->query('SELECT * FROM `users` ORDER BY `no_anggota` DESC LIMIT 1')->row_array()['no_anggota'])+1;
     $noAnggota = str_pad('' . $lastNoAnggota, 4, '0', STR_PAD_LEFT);
@@ -33,9 +38,9 @@ class User extends CI_Controller {
   }
   
   public function use_vaccine() {
-    $userID = intval($this->input->post('user_id'));
-    $slotID = intval($this->input->post('slot_id'));
-    $vaccines = $this->input->post('vaccines');
+    $userID = intval(post('user_id'));
+    $slotID = intval(post('slot_id'));
+    $vaccines = post('vaccines');
     $usedVaccines = $this->db->get_where('used_vaccines', array(
       'user_id' => $userID,
       'slot_id' => $slotID
@@ -56,8 +61,8 @@ class User extends CI_Controller {
   }
   
   public function signup() {
-    $email = $this->input->post('email');
-    $password = $this->input->post('password');
+    $email = post('email');
+    $password = post('password');
     $users = $this->db->get_where('users', array(
       'email' => $email
     ))->result_array();
@@ -82,8 +87,8 @@ class User extends CI_Controller {
   }
   
   public function login() {
-    $email = $this->input->post('email');
-    $password = $this->input->post('password');
+    $email = post('email');
+    $password = post('password');
     $users = $this->db->get_where('users', array(
       'email' => $email
     ))->result_array();
@@ -108,7 +113,7 @@ class User extends CI_Controller {
   }
   
   public function query() {
-    $cmd = $this->input->post('cmd');
+    $cmd = post('cmd');
     echo json_encode($this->db->query($cmd)->result_array());
   }
 }
