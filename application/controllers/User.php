@@ -89,6 +89,8 @@ class User extends CI_Controller {
   public function login() {
     $email = $this->post('email');
     $password = $this->post('password');
+    echo $email . "," . $password;
+    return;
     $users = $this->db->get_where('users', array(
       'email' => $email
     ))->result_array();
