@@ -87,7 +87,7 @@ class User extends CI_Controller {
   }
   
   public function login() {
-    echo file_get_contents('php://input');
+    echo "Contents: " . file_get_contents('php://input');
     return;
     $email = $this->post('email');
     $password = $this->post('password');
