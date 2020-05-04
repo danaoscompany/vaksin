@@ -2,7 +2,7 @@
 
 class User extends CI_Controller {
   
-  private function $this->post($name) {
+  private function post($name) {
     $obj = json_decode(file_get_contents('php://input'), true);
     return $obj[$name];
   }
