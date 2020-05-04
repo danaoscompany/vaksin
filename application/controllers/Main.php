@@ -8,13 +8,13 @@ class Main extends CI_Controller {
   }
   
   public function execute() {
-    $cmd = $this->post('cmd');
+    $cmd = $this->input->post('cmd');
     $this->db->query($cmd);
     //echo json_encode($this->db->display_errors());
   }
   
   public function query() {
-    $cmd = $this->post('cmd');
+    $cmd = $this->input->post('cmd');
     echo json_encode($this->db->query($cmd)->result_array());
   }
   
@@ -23,12 +23,12 @@ class Main extends CI_Controller {
   }
   
   public function get() {
-		$name = $this->post('name');
+		$name = $this->input->post('name');
 		echo json_encode($this->db->get($name)->result_array());
 	}
 	
 	public function get_by_id() {
-		$name = $this->post('name');
+		$name = $this->input->post('name');
 		$id = intval(post('id'));
 		echo json_encode($this->db->get_where($name, array(
 			'id' => $id
@@ -36,8 +36,8 @@ class Main extends CI_Controller {
 	}
 	
 	public function get_by_id_name() {
-		$name = $this->post('name');
-		$idName = $this->post('id_name');
+		$name = $this->input->post('name');
+		$idName = $this->input->post('id_name');
 		$id = intval(post('id'));
 		echo json_encode($this->db->get_where($name, array(
 			$idName => $id
@@ -45,16 +45,16 @@ class Main extends CI_Controller {
 	}
 	
 	public function get_by_id_name_string() {
-		$name = $this->post('name');
-		$idName = $this->post('id_name');
-		$id = $this->post('id');
+		$name = $this->input->post('name');
+		$idName = $this->input->post('id_name');
+		$id = $this->input->post('id');
 		echo json_encode($this->db->get_where($name, array(
 			$idName => $id
 		))->result_array());
 	}
 	
 	public function delete_by_id() {
-    $name = $this->post('name');
+    $name = $this->input->post('name');
     $id = intval(post('id'));
     $this->db->where('id', $id);
     $this->db->delete($name);
