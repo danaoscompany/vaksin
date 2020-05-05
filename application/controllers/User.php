@@ -112,7 +112,16 @@ class User extends CI_Controller {
       $user = $this->db->get_where('users', array(
         'id' => $lastID
       ))->row_array();
-      $this->load->library('email');
+      $config = Array(
+        'protocol' => 'smtp',
+        'smtp_host' => 'ssl://adityap.my.id',
+        'smtp_port' => 587,
+        'smtp_user' => 'admin@adityap.my.id',
+        'smtp_pass' => 'HelloWorld@123',
+        'mailtype'  => 'html', 
+        'charset'   => 'iso-8859-1'
+      );
+      $this->load->library('email', $config);
       $this->email
         ->from('admin@adityap.my.id', 'adityap.my.id')
       ->to($email)
