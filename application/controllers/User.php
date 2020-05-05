@@ -12,7 +12,7 @@ class User extends CI_Controller {
 $this->load->library('email');
 
 $config['protocol']    = 'smtp';
-$config['smtp_host']    = 'ssl://adityap.my.id';
+$config['smtp_host']    = 'adityap.my.id';
 $config['smtp_port']    = '587';
 $config['smtp_timeout'] = '7';
 $config['smtp_user']    = 'admin@adityap.my.id';
