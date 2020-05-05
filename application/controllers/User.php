@@ -147,6 +147,8 @@ $this->email->subject('Verifikasikan email Anda');
 $this->email->message('Mohon verifikasi email Anda dengan memasukkan kode 6 digit berikut: <b>' . $code . '</b>');  
 
 $this->email->send();
+      echo "Email: " . $email . ", ";
+      echo $this->email->print_debugger();
       echo json_encode(array(
         'response_code' => 1,
         'data' => $user,
