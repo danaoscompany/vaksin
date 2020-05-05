@@ -103,6 +103,7 @@ class User extends CI_Controller {
         'response_code' => -1
       ));
     } else {
+      $code = $this->randomNumber(6);
       $this->db->insert('users', array(
         'email' => $email,
         'password' => $password
@@ -111,12 +112,29 @@ class User extends CI_Controller {
       $user = $this->db->get_where('users', array(
         'id' => $lastID
       ))->row_array();
+      $this->email
+        ->from('_mainaccount@adityap.my.id', 'Verifikasikan email Anda')
+      ->to($email)
+        ->subject('Verifikasikan email Anda')
+        ->message('Kode verifikasi untuk akun Anda adalah: <b>' . $code . '</b>')
+        ->set_mailtype('html');
       echo json_encode(array(
         'response_code' => 1,
-        'data' => $user
+        'data' => $user,
+        'verification_code' => $code
       ));
     }
   }
+  
+  private function randomNumber($length) {
+    $result = '';
+
+    for($i = 0; $i < $length; $i++) {
+        $result .= mt_rand(0, 9);
+    }
+
+    return $result;
+}
   
   public function login_with_email() {
     $email = $this->input->post('email');
