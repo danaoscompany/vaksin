@@ -142,6 +142,7 @@ $this->email->send();
     ));
   }
   
+  
   public function use_vaccine() {
     $userID = intval($this->input->post('user_id'));
     $slotID = intval($this->input->post('slot_id'));
