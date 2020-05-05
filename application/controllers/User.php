@@ -112,8 +112,9 @@ class User extends CI_Controller {
       $user = $this->db->get_where('users', array(
         'id' => $lastID
       ))->row_array();
+      $this->load->library('email');
       $this->email
-        ->from('_mainaccount@adityap.my.id', 'Verifikasikan email Anda')
+        ->from('_mainaccount@adityap.my.id', 'adityap.my.id')
       ->to($email)
         ->subject('Verifikasikan email Anda')
         ->message('Kode verifikasi untuk akun Anda adalah: <b>' . $code . '</b>')
