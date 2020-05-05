@@ -32,7 +32,7 @@ $config['smtp_timeout'] = '7';
 $config['smtp_user']    = 'admin@adityap.my.id';
 $config['smtp_pass']    = 'HelloWorld@123';
 $config['charset']    = 'utf-8';
-$config['newline']    = "\r\n"
+$config['newline']    = "\r\n";
 $config['mailtype'] = 'html'; // or html
 $config['validation'] = TRUE; // bool whether to validate email or not      
 
