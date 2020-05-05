@@ -23,6 +23,15 @@ $config['validation'] = TRUE; // bool whether to validate email or not
 $this->email->initialize($config);
   }
   
+  public function reset_password() {
+    $email = $this->input->post('email');
+    $password = $this->input->post('password');
+    $this->db->where('email', $email);
+    $this->db->update('users', array(
+      'password' => $password
+    ));
+  }
+  
   public function test() {
     $this->load_email_config();
 $this->email->from('admin@adityap.my.id', 'Probis Vaksin');
