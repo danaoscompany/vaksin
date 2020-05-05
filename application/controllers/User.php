@@ -16,9 +16,9 @@ class User extends CI_Controller {
         'id' => intval($row['slot_id'])
       ))->row_array();
       $results[$i]['start_date'] = $slot['start_date'];
-      $row['end_date'] = $slot['end_date'];
-      $row['slots'] = $slot['slots'];
-      $row['slots_used'] = $slot['slots_used'];
+      $results[$i]['end_date'] = $slot['end_date'];
+      $results[$i]['slots'] = $slot['slots'];
+      $results[$i]['slots_used'] = $slot['slots_used'];
     }
     echo json_encode($results);
   }
@@ -32,7 +32,7 @@ $config['smtp_timeout'] = '7';
 $config['smtp_user']    = 'admin@adityap.my.id';
 $config['smtp_pass']    = 'HelloWorld@123';
 $config['charset']    = 'utf-8';
-$config['newline']    = "\r\n";
+$config['newline']    = "\r\n"
 $config['mailtype'] = 'html'; // or html
 $config['validation'] = TRUE; // bool whether to validate email or not      
 
