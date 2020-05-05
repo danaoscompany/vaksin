@@ -8,25 +8,30 @@ class User extends CI_Controller {
   }
   
   public function test() {
-    $config = array(
-    'protocol' => 'smtp', // 'mail', 'sendmail', or 'smtp'
-    'smtp_host' => 'adityap.my.id', 
-    'smtp_port' => 587,
-    'smtp_user' => 'admin@adityap.my.id',
-    'smtp_pass' => 'HelloWorld@123',
-    'smtp_crypto' => 'ssl', //can be 'ssl' or 'tls' for example
-    'mailtype' => 'text', //plaintext 'text' mails or 'html'
-    'smtp_timeout' => '4', //in seconds
-    'charset' => 'iso-8859-1',
-    'wordwrap' => TRUE
-);
-      $this->load->library('email', $config);
-      $this->email
-        ->from('admin@adityap.my.id', 'Test')
-      ->to('danaoscompany@gmail.com')
-        ->subject('Verifikasikan email Anda')
-        ->message('Test')
-        ->set_mailtype('text');
+    
+$this->load->library('email');
+
+$config['protocol']    = 'smtp';
+$config['smtp_host']    = 'ssl://adityap.my.id';
+$config['smtp_port']    = '587';
+$config['smtp_timeout'] = '7';
+$config['smtp_user']    = 'admin@adityap.my.id';
+$config['smtp_pass']    = 'HelloWorld@123';
+$config['charset']    = 'utf-8';
+$config['newline']    = "\r\n";
+$config['mailtype'] = 'text'; // or html
+$config['validation'] = TRUE; // bool whether to validate email or not      
+
+$this->email->initialize($config);
+
+$this->email->from('admin@adityap.my.id', 'DanaOS');
+$this->email->to('danaoscompany@gmail.com'); 
+$this->email->subject('Email Test');
+$this->email->message('Testing the email class.');  
+
+$this->email->send();
+
+echo $this->email->print_debugger();
   }
   
   public function sign_in_with_google() {
