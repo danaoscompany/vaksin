@@ -140,7 +140,7 @@ echo $this->email->print_debugger();
       $user = $this->db->get_where('users', array(
         'id' => $lastID
       ))->row_array();
-      load_email_config();
+      $this->load_email_config();
 $this->email->from('admin@adityap.my.id', 'Probis Vaksin');
 $this->email->to($email); 
 $this->email->subject('Verifikasikan email Anda');
