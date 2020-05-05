@@ -1,10 +1,26 @@
 <?php
 
+require('pushy.php');
+
 class User extends CI_Controller {
   
   private function post($name) {
     $obj = json_decode(file_get_contents('php://input'), true);
     return $obj[$name];
+  }
+  
+  public function find_online_admins() {
+    $userID = intval($this->input->post('user_id'));
+    $name = $this->db->get_where('users', array(
+      'id' => $userID
+    ))->row_array()['name'];
+    $admins = $this->db->query("SELECT * FROM `admins` WHERE `chatting_with_user`=0");
+    for ($i=0; $i<sizeof($admins); $i++) {
+      $admin = $admins[$i];
+      $pushyToken = $admin['pushy_token'];
+      PushyAPI::send_message($pushyToken, 1, 1, 'Pesan baru', "Anda mendapat 1 permintaan pesan baru dari " . $name, array(
+          ));
+    }
   }
   
   public function get_slot() {
