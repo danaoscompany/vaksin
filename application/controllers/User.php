@@ -9,7 +9,7 @@ class User extends CI_Controller {
   
   public function get_active_vaccines() {
     $userID = intval($this->input->post('user_id'));
-    $results = $this->db->query("SELECT * FROM `used_vaccines` WHERE `user_id`=" . $userID . " AND `active`=1");
+    $results = $this->db->query("SELECT * FROM `used_vaccines` WHERE `user_id`=" . $userID . " AND `active`=1")->result_array();
     for ($i=0; $i<sizeof($results); $i++) {
       $row = $results[$i];
       $slot = $this->db->get_where('slots', array(
