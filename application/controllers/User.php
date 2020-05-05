@@ -13,7 +13,7 @@ class User extends CI_Controller {
     for ($i=0; $i<sizeof($results); $i++) {
       $row = $results[$i];
       $slot = $this->db->get_where('slots', array(
-        'vaccine_id' => intval($row['vaccine_id'])
+        'id' => intval($row['slot_id'])
       ));
       $row['start_date'] = $slot['start_date'];
       $row['end_date'] = $slot['end_date'];
