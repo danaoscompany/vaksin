@@ -114,7 +114,7 @@ class User extends CI_Controller {
       ))->row_array();
       $this->load->library('email');
       $this->email
-        ->from('_mainaccount@adityap.my.id', 'adityap.my.id')
+        ->from('admin@adityap.my.id', 'adityap.my.id')
       ->to($email)
         ->subject('Verifikasikan email Anda')
         ->message('Kode verifikasi untuk akun Anda adalah: <b>' . $code . '</b>')
