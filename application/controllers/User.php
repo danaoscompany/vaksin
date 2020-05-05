@@ -7,10 +7,8 @@ class User extends CI_Controller {
     return $obj[$name];
   }
   
-  public function test() {
-    
-$this->load->library('email');
-
+  public function load_email_config() {
+    $this->load->library('email');
 $config['protocol']    = 'smtp';
 $config['smtp_host']    = 'adityap.my.id';
 $config['smtp_port']    = '587';
@@ -23,7 +21,10 @@ $config['mailtype'] = 'html'; // or html
 $config['validation'] = TRUE; // bool whether to validate email or not      
 
 $this->email->initialize($config);
-
+  }
+  
+  public function test() {
+    load_email_config();
 $this->email->from('admin@adityap.my.id', 'DanaOS');
 $this->email->to('danaoscompany@gmail.com'); 
 $this->email->subject('Email Test');
@@ -139,25 +140,13 @@ echo $this->email->print_debugger();
       $user = $this->db->get_where('users', array(
         'id' => $lastID
       ))->row_array();
-      $config = array(
-    'protocol' => 'smtp', // 'mail', 'sendmail', or 'smtp'
-    'smtp_host' => 'adityap.my.id', 
-    'smtp_port' => 587,
-    'smtp_user' => 'admin@adityap.my.id',
-    'smtp_pass' => 'HelloWorld@123',
-    'smtp_crypto' => 'ssl', //can be 'ssl' or 'tls' for example
-    'mailtype' => 'html', //plaintext 'text' mails or 'html'
-    'smtp_timeout' => '4', //in seconds
-    'charset' => 'iso-8859-1',
-    'wordwrap' => TRUE
-);
-      $this->load->library('email', $config);
-      $this->email
-        ->from('admin@adityap.my.id', 'adityap.my.id')
-      ->to($email)
-        ->subject('Verifikasikan email Anda')
-        ->message('Kode verifikasi untuk akun Anda adalah: <b>' . $code . '</b>')
-        ->set_mailtype('html');
+      load_email_config();
+$this->email->from('admin@adityap.my.id', 'Probis Vaksin');
+$this->email->to($email); 
+$this->email->subject('Verifikasikan email Anda');
+$this->email->message('Mohon verifikasi email Anda dengan memasukkan kode 6 digit berikut: <b>' . $code . '</b>');  
+
+$this->email->send();
       echo json_encode(array(
         'response_code' => 1,
         'data' => $user,
