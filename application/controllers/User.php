@@ -151,7 +151,6 @@ $this->email->send();
     ));
   }
   
-  
   public function use_vaccine() {
     $userID = intval($this->input->post('user_id'));
     $slotID = intval($this->input->post('slot_id'));
@@ -163,6 +162,8 @@ $this->email->send();
     if (sizeof($usedVaccines) > 0) {
       echo -1;
     } else {
+      $this->db->where('user_id', $userID)->where('slot_id', $slotID);
+      $this->db->delete('used_vaccines');
       $this->db->insert('used_vaccines', array(
         'user_id' => $userID,
         'slot_id' => $slotID,
