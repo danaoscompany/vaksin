@@ -29,7 +29,7 @@ class Main extends CI_Controller {
 	
 	public function get_by_id() {
 		$name = $this->input->post('name');
-		$id = intval(post('id'));
+		$id = intval($this->input->post('id'));
 		echo json_encode($this->db->get_where($name, array(
 			'id' => $id
 		))->result_array());
@@ -38,7 +38,7 @@ class Main extends CI_Controller {
 	public function get_by_id_name() {
 		$name = $this->input->post('name');
 		$idName = $this->input->post('id_name');
-		$id = intval(post('id'));
+		$id = intval($this->input->post('id'));
 		echo json_encode($this->db->get_where($name, array(
 			$idName => $id
 		))->result_array());
@@ -55,7 +55,7 @@ class Main extends CI_Controller {
 	
 	public function delete_by_id() {
     $name = $this->input->post('name');
-    $id = intval(post('id'));
+    $id = intval($this->input->post('id'));
     $this->db->where('id', $id);
     $this->db->delete($name);
   }

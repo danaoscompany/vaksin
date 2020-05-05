@@ -93,14 +93,14 @@ $this->email->send();
   }
   
   public function complete_data() {
-    $userID = intval(post('user_id'));
+    $userID = intval($this->input->post('user_id'));
     $name = $this->input->post('name');
     $address = $this->input->post('address');
-    $age = intval(post('age'));
+    $age = intval($this->input->post('age'));
     $parentName = $this->input->post('parent_name');
     $phone = $this->input->post('phone');
     $lastVaccineDate = $this->input->post('last_vaccine_date');
-    $lastVaccineID = intval(post('last_vaccine_id'));
+    $lastVaccineID = intval($this->input->post('last_vaccine_id'));
     $registrationDate = $this->input->post('registration_date');
     $lastNoAnggota = 1;
     $lastUsers = $this->db->query('SELECT * FROM `users` ORDER BY `no_anggota` DESC LIMIT 1')->result_array();
@@ -127,8 +127,8 @@ $this->email->send();
   }
   
   public function use_vaccine() {
-    $userID = intval(post('user_id'));
-    $slotID = intval(post('slot_id'));
+    $userID = intval($this->input->post('user_id'));
+    $slotID = intval($this->input->post('slot_id'));
     $vaccines = $this->input->post('vaccines');
     $usedVaccines = $this->db->get_where('used_vaccines', array(
       'user_id' => $userID,
