@@ -36,6 +36,7 @@ echo $this->email->print_debugger();
   }
   
   public function send_verification_email() {
+    $email = $this->input->post('email');
     $this->load_email_config();
 $this->email->from('admin@adityap.my.id', 'Probis Vaksin');
 $this->email->to($email); 
