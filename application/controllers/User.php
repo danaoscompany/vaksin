@@ -159,11 +159,17 @@ $this->email->send();
       'user_id' => $userID,
       'slot_id' => $slotID
     ))->result_array();
-    /*if (sizeof($usedVaccines) > 0) {
-      echo -1;
-    } else {*/
+    if (sizeof($usedVaccines) > 0) {
       $this->db->where('user_id', $userID)->where('slot_id', $slotID);
-      $this->db->delete('used_vaccines');
+      $this->db->update('used_vaccines', array(
+        'user_id' => $userID,
+        'slot_id' => $slotID,
+        'vaccines' => $vaccines
+      ));
+      echo 1;
+    } else {
+      //$this->db->where('user_id', $userID)->where('slot_id', $slotID);
+      //$this->db->delete('used_vaccines');
       $this->db->insert('used_vaccines', array(
         'user_id' => $userID,
         'slot_id' => $slotID,
@@ -173,7 +179,7 @@ $this->email->send();
       $this->db->set('slots_used', 'slots_used+1', FALSE);
       $this->db->update('slots');
       echo 1;
-    //}
+    }
   }
   
   public function signup() {
