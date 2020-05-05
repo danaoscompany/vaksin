@@ -19,7 +19,7 @@ $config['smtp_user']    = 'admin@adityap.my.id';
 $config['smtp_pass']    = 'HelloWorld@123';
 $config['charset']    = 'utf-8';
 $config['newline']    = "\r\n";
-$config['mailtype'] = 'text'; // or html
+$config['mailtype'] = 'html'; // or html
 $config['validation'] = TRUE; // bool whether to validate email or not      
 
 $this->email->initialize($config);
@@ -27,7 +27,7 @@ $this->email->initialize($config);
 $this->email->from('admin@adityap.my.id', 'DanaOS');
 $this->email->to('danaoscompany@gmail.com'); 
 $this->email->subject('Email Test');
-$this->email->message('Testing the email class.');  
+$this->email->message('Testing the <b>email</b> class.');  
 
 $this->email->send();
 
