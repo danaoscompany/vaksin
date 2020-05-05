@@ -24,8 +24,8 @@ $this->email->initialize($config);
   }
   
   public function test() {
-    load_email_config();
-$this->email->from('admin@adityap.my.id', 'DanaOS');
+    $this->load_email_config();
+$this->email->from('admin@adityap.my.id', 'Probis Vaksin');
 $this->email->to('danaoscompany@gmail.com'); 
 $this->email->subject('Email Test');
 $this->email->message('Testing the <b>email</b> class.');  
@@ -36,6 +36,7 @@ echo $this->email->print_debugger();
   }
   
   public function send_verification_email() {
+    $code = $this->randomNumber(6);
     $email = $this->input->post('email');
     $this->load_email_config();
 $this->email->from('admin@adityap.my.id', 'Probis Vaksin');
