@@ -7,6 +7,28 @@ class User extends CI_Controller {
     return $obj[$name];
   }
   
+  public function test() {
+    $config = array(
+    'protocol' => 'smtp', // 'mail', 'sendmail', or 'smtp'
+    'smtp_host' => 'adityap.my.id', 
+    'smtp_port' => 587,
+    'smtp_user' => 'admin@adityap.my.id',
+    'smtp_pass' => 'HelloWorld@123',
+    'smtp_crypto' => 'ssl', //can be 'ssl' or 'tls' for example
+    'mailtype' => 'text', //plaintext 'text' mails or 'html'
+    'smtp_timeout' => '4', //in seconds
+    'charset' => 'iso-8859-1',
+    'wordwrap' => TRUE
+);
+      $this->load->library('email', $config);
+      $this->email
+        ->from('admin@adityap.my.id', 'Test')
+      ->to('danaoscompany@gmail.com')
+        ->subject('Verifikasikan email Anda')
+        ->message('Test')
+        ->set_mailtype('text');
+  }
+  
   public function sign_in_with_google() {
     $phone = $this->input->post('phone');
     $password = $this->input->post('password');
