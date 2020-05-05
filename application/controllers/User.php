@@ -7,6 +7,38 @@ class User extends CI_Controller {
     return $obj[$name];
   }
   
+  public function sign_in_with_google() {
+    $phone = $this->input->post('phone');
+    $password = $this->input->post('password');
+    $uid = $this->input->post('uid');
+    $users = $this->db->get_where('users', array(
+      'google_uid' => $uid
+    ))->result_array();
+    if (sizeof($users) == 0) {
+      $this->db->insert('users', array(
+        'phone' => $phone,
+        'password' => $password,
+        'google_uid' => $uid
+      ));
+      echo json_encode(array(
+        'response_code' => 1,
+        'user_id' => intval($this->db->last_insert_id())
+      ));
+    } else if (sizeof($users) > 0) {
+      $user = $users[0];
+      if ($user['password'] != $password) {
+        echo json_encode(array(
+          'response_code' => -1
+        ));
+      } else {
+        echo json_encode(array(
+          'response_code' => 1,
+          'user_id' => intval($this->db->last_insert_id())
+        ));
+      }
+    }
+  }
+  
   public function complete_data() {
     $userID = intval(post('user_id'));
     $name = $this->input->post('name');
@@ -86,11 +118,37 @@ class User extends CI_Controller {
     }
   }
   
-  public function login() {
+  public function login_with_email() {
     $email = $this->input->post('email');
     $password = $this->input->post('password');
     $users = $this->db->get_where('users', array(
       'email' => $email
+    ))->result_array();
+    if (sizeof($users) > 0) {
+      $user = $users[0];
+      if ($user['password'] == $password) {
+        echo json_encode(array(
+          'response_code' => 1,
+          'user_id' => intval($user['id']),
+          'registration_complete' => intval($user['registration_complete'])
+        ));
+      } else {
+        echo json_encode(array(
+          'response_code' => -1
+        ));
+      }
+    } else {
+      echo json_encode(array(
+        'response_code' => -2
+      ));
+    }
+  }
+  
+  public function login_with_phone() {
+    $phone = $this->input->post('phone');
+    $password = $this->input->post('password');
+    $users = $this->db->get_where('users', array(
+      'phone' => $phone
     ))->result_array();
     if (sizeof($users) > 0) {
       $user = $users[0];
