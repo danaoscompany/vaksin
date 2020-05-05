@@ -14,7 +14,7 @@ class User extends CI_Controller {
       $row = $results[$i];
       $slot = $this->db->get_where('slots', array(
         'id' => intval($row['slot_id'])
-      ));
+      ))->row_array();
       $row['start_date'] = $slot['start_date'];
       $row['end_date'] = $slot['end_date'];
       $row['slots'] = $slot['slots'];
