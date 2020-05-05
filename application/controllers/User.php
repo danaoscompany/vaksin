@@ -7,6 +7,15 @@ class User extends CI_Controller {
     return $obj[$name];
   }
   
+  public function get_slot() {
+    $userID = intval($this->input->post('user_id'));
+    $slotID = intval($this->input->post('slot_id'));
+    echo json_encode($this->db->get_where('slots', array(
+      'user_id' => $userID,
+      'slot_id' => $slotID
+    ))->row_array());
+  }
+  
   public function get_active_vaccines() {
     $userID = intval($this->input->post('user_id'));
     $results = $this->db->query("SELECT * FROM `used_vaccines` WHERE `user_id`=" . $userID . " AND `active`=1")->result_array();
