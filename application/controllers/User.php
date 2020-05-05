@@ -102,9 +102,9 @@ $this->email->send();
     $lastVaccineDate = $this->input->post('last_vaccine_date');
     $lastVaccineID = intval(post('last_vaccine_id'));
     $registrationDate = $this->input->post('registration_date');
-    $this->db->where('id', $userID);
     $lastNoAnggota = intval($this->db->query('SELECT * FROM `users` ORDER BY `no_anggota` DESC LIMIT 1')->row_array()['no_anggota'])+1;
     $noAnggota = str_pad('' . $lastNoAnggota, 4, '0', STR_PAD_LEFT);
+    $this->db->where('id', $userID);
     $this->db->update('users', array(
       'no_anggota' => $noAnggota,
       'name' => $name,
