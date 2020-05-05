@@ -10,7 +10,7 @@ class User extends CI_Controller {
   public function get_slot() {
     $userID = intval($this->input->post('user_id'));
     $slotID = intval($this->input->post('slot_id'));
-    echo json_encode($this->db->get_where('slots', array(
+    echo json_encode($this->db->get_where('used_vaccines', array(
       'user_id' => $userID,
       'slot_id' => $slotID
     ))->row_array());
