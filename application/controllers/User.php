@@ -17,6 +17,23 @@ class User extends CI_Controller {
     $this->db->update('users');
   }
   
+  public function cancel_slot() {
+    $slotID = intval($this->input->post('slot_id'));
+    $slot = $this->db->get_where('slots', array(
+      'id' => $slotID
+    ))->row_array();
+    $userID = intval($slot['user_id']);
+    $paid = intval($slot['paid']);
+    $price = intval($slot['price']);
+    if ($paid == 1) {
+      $this->db->where('id', $userID);
+      $this->db->set('balance', 'balance-' . $price);
+      $this->db->update('users');
+    }
+    $this->db->where('id', $slotID);
+    $this->db->delete('slots');
+  }
+  
   public function confirm_payment_success() {
     $obj = json_decode(file_get_contents('php://input'), true);
     $externalID = $obj['external_id'];
