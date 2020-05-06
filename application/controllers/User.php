@@ -32,6 +32,22 @@ class User extends CI_Controller {
     ))->row_array());
   }
   
+  public function get_added_vaccines() {
+    $userID = intval($this->input->post('user_id'));
+    $results = $this->db->query("SELECT * FROM `used_vaccines` WHERE `user_id`=" . $userID . "")->result_array();
+    for ($i=0; $i<sizeof($results); $i++) {
+      $row = $results[$i];
+      $slot = $this->db->get_where('slots', array(
+        'id' => intval($row['slot_id'])
+      ))->row_array();
+      $results[$i]['start_date'] = $slot['start_date'];
+      $results[$i]['end_date'] = $slot['end_date'];
+      $results[$i]['slots'] = $slot['slots'];
+      $results[$i]['slots_used'] = $slot['slots_used'];
+    }
+    echo json_encode($results);
+  }
+  
   public function get_active_vaccines() {
     $userID = intval($this->input->post('user_id'));
     $results = $this->db->query("SELECT * FROM `used_vaccines` WHERE `user_id`=" . $userID . " AND `active`=1")->result_array();
