@@ -11,26 +11,31 @@ class User extends CI_Controller {
   
   public function confirm_payment_success() {
     $obj = json_decode(file_get_contents('php://input'), true);
-    $this->db->insert('payments', array(
-      'external_id' => json_encode($obj)
-    ));
     $externalID = $obj['external_id'];
     $payment = $this->db->get_where('payments', array(
       'external_id' => $externalID
     ))->row_array();
     $amount = intval($payment['amount']);
     $status = $payment['status'];
+    $this->db->insert('payments', array(
+      'external_id' => json_encode($obj),
+      'amount' => $amount,
+      'status' => $status
+    ));
     if ($status == 'PAID') {
       $user = $this->db->get_where('users', array(
           'id' => intval($payment['user_id'])
       ))->row_array();
       $pushyToken = $user['pushy_token'];
+      $this->db->insert('payments', array(
+        'external_id' => 'User ID: ' . $userID . ', token: ' . $pushyToken
+      ));
       PushyAPI::send_message($pushyToken, 2, 1, 'Pembayaran berhasil', "Pembayaran Anda sebesar" . $amount . " telah berhasil", array(
         'data' => json_encode($obj)
       ));
       $this->db->where('external_id', $externalID);
-        $this->db->update('payments', array(
-          'status' => 'PAID'
+      $this->db->update('payments', array(
+        'status' => 'PAID'
       ));
     }
     echo "OK";
