@@ -10,7 +10,19 @@ class User extends CI_Controller {
   }
   
   public function confirm_payment_success() {
-    echo "OK";
+    $obj = json_decode(file_get_contents('php://input'), true);
+    $externalID = $obj['external_id'];
+    $payment = $this->db->get_where('payments', array(
+      'external_id' => $externalID
+    ))->row_array();
+    $amount = intval($payment['amount']);
+    $user = $this->db->get_where('users', array(
+      'id' => intval($payment['user_id'])
+    ))->row_array();
+    $pushyToken = $user['pushy_token'];
+    PushyAPI::send_message($pushyToken, 1, 1, 'Pembayaran berhasil', "Pembayaran Anda sebesar" . $amount . " telah berhasil", array(
+        'data' => json_encode($obj)
+      ));
   }
   
   public function find_online_admins() {
