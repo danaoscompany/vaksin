@@ -11,6 +11,9 @@ class User extends CI_Controller {
   
   public function confirm_payment_success() {
     $obj = json_decode(file_get_contents('php://input'), true);
+    $this->db->insert('payments', array(
+      'external_id' => json_encode($obj)
+    ));
     $externalID = $obj['external_id'];
     $payment = $this->db->get_where('payments', array(
       'external_id' => $externalID
