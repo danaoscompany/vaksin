@@ -19,7 +19,7 @@ class User extends CI_Controller {
   
   public function cancel_slot() {
     $slotID = intval($this->input->post('slot_id'));
-    $slot = $this->db->get_where('slots', array(
+    $slot = $this->db->get_where('used_vaccines', array(
       'id' => $slotID
     ))->row_array();
     $userID = intval($slot['user_id']);
