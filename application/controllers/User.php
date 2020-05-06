@@ -17,19 +17,11 @@ class User extends CI_Controller {
     ))->row_array();
     $amount = intval($payment['amount']);
     $status = $obj['status'];
-    $this->db->insert('payments', array(
-      'external_id' => json_encode($obj),
-      'amount' => $amount,
-      'status' => $status
-    ));
     if ($status == 'PAID') {
       $user = $this->db->get_where('users', array(
           'id' => intval($payment['user_id'])
       ))->row_array();
       $pushyToken = $user['pushy_token'];
-      $this->db->insert('payments', array(
-        'external_id' => 'User ID: ' . $userID . ', token: ' . $pushyToken
-      ));
       PushyAPI::send_message($pushyToken, 2, 1, 'Pembayaran berhasil', "Pembayaran Anda sebesar" . $amount . " telah berhasil", array(
         'data' => json_encode($obj)
       ));
