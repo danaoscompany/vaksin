@@ -27,11 +27,11 @@ class User extends CI_Controller {
     $price = intval($slot['price']);
     if ($paid == 1) {
       $this->db->where('id', $userID);
-      $this->db->set('balance', 'balance-' . $price);
+      $this->db->set('balance', 'balance+' . $price);
       $this->db->update('users');
     }
     $this->db->where('id', $slotID);
-    $this->db->delete('slots');
+    $this->db->delete('used_vaccines');
   }
   
   public function confirm_payment_success() {
