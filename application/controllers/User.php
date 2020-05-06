@@ -29,6 +29,9 @@ class User extends CI_Controller {
       $this->db->update('payments', array(
         'status' => 'PAID'
       ));
+      $this->db->where('id', intval($user['id']));
+      $this->db->set('balance', 'balance+1', FALSE);
+      $this->db->update('users');
     }
     echo "OK";
   }
