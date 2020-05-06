@@ -23,6 +23,7 @@ class User extends CI_Controller {
     PushyAPI::send_message($pushyToken, 1, 1, 'Pembayaran berhasil', "Pembayaran Anda sebesar" . $amount . " telah berhasil", array(
         'data' => json_encode($obj)
       ));
+    echo "OK";
   }
   
   public function find_online_admins() {
