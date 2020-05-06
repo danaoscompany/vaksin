@@ -16,7 +16,7 @@ class User extends CI_Controller {
       'external_id' => $externalID
     ))->row_array();
     $amount = intval($payment['amount']);
-    $status = $payment['status'];
+    $status = $obj['status'];
     $this->db->insert('payments', array(
       'external_id' => json_encode($obj),
       'amount' => $amount,
