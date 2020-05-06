@@ -9,6 +9,14 @@ class User extends CI_Controller {
     return $obj[$name];
   }
   
+  public function purchase() {
+    $userID = intval($this->input->post('user_id'));
+    $amount = intval($this->input->post('amount'));
+    $this->db->where('id', $userID);
+    $this->db->set('balance', 'balance-' . $amount, false);
+    $this->db->update('users');
+  }
+  
   public function confirm_payment_success() {
     $obj = json_decode(file_get_contents('php://input'), true);
     $externalID = $obj['external_id'];
@@ -214,6 +222,9 @@ $this->email->send();
     $userID = intval($this->input->post('user_id'));
     $slotID = intval($this->input->post('slot_id'));
     $vaccines = $this->input->post('vaccines');
+    $price = intval($this->input->post('price'));
+    $paymentMethod = intval($this->input->post('payment_method'));
+    $paid = intval($this->input->post('paid'));
     $usedVaccines = $this->db->get_where('used_vaccines', array(
       'user_id' => $userID,
       'slot_id' => $slotID
@@ -223,7 +234,10 @@ $this->email->send();
       $this->db->update('used_vaccines', array(
         'user_id' => $userID,
         'slot_id' => $slotID,
-        'vaccines' => $vaccines
+        'vaccines' => $vaccines,
+        'price' => $price,
+        'payment_method' => $paymentMethod,
+        'paid' => $paid
       ));
       echo 1;
     } else {
@@ -232,7 +246,10 @@ $this->email->send();
       $this->db->insert('used_vaccines', array(
         'user_id' => $userID,
         'slot_id' => $slotID,
-        'vaccines' => $vaccines
+        'vaccines' => $vaccines,
+        'price' => $price,
+        'payment_method' => $paymentMethod,
+        'paid' => $paid
       ));
       $this->db->where('id', $slotID);
       $this->db->set('slots_used', 'slots_used+1', FALSE);
