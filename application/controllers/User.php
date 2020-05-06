@@ -1,6 +1,6 @@
 <?php
 
-require('pushy.php');
+require('Message.php');
 
 class User extends CI_Controller {
   
