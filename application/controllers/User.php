@@ -22,7 +22,7 @@ class User extends CI_Controller {
           'id' => intval($payment['user_id'])
       ))->row_array();
       $pushyToken = $user['pushy_token'];
-      PushyAPI::send_message($pushyToken, 1, 1, 'Pembayaran berhasil', "Pembayaran Anda sebesar" . $amount . " telah berhasil", array(
+      PushyAPI::send_message($pushyToken, 1, 2, 'Pembayaran berhasil', "Pembayaran Anda sebesar" . $amount . " telah berhasil", array(
         'data' => json_encode($obj)
       ));
       $this->db->where('external_id', $externalID);
