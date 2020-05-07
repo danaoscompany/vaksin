@@ -241,6 +241,13 @@ $this->email->send();
   public function use_vaccine() {
     $userID = intval($this->input->post('user_id'));
     $slotID = intval($this->input->post('slot_id'));
+    $noAnggota = 1;
+    $usedVaccines = $this->db->query("SELECT * FROM `used_vaccines` WHERE `user_id`=" . $userID . " AND `slot_id`=" . $slotID . " ORDER BY `no_anggota` DESC LIMIT 1")->result_array();
+    if (sizeof($usedVaccines) > 0) {
+      $noAnggota = $usedVaccines[0]['no_anggota'];
+      $noAnggota = intval($noAnggota)+1;
+    }
+    $noAnggota = str_pad($noAnggota, 4, '0', STR_PAD_LEFT);
     $vaccines = $this->input->post('vaccines');
     $price = intval($this->input->post('price'));
     $paymentMethod = intval($this->input->post('payment_method'));
@@ -254,6 +261,7 @@ $this->email->send();
       $this->db->update('used_vaccines', array(
         'user_id' => $userID,
         'slot_id' => $slotID,
+        'no_anggota' => $noAnggota,
         'vaccines' => $vaccines,
         'price' => $price,
         'payment_method' => $paymentMethod,
@@ -266,6 +274,7 @@ $this->email->send();
       $this->db->insert('used_vaccines', array(
         'user_id' => $userID,
         'slot_id' => $slotID,
+        'no_anggota' => $noAnggota,
         'vaccines' => $vaccines,
         'price' => $price,
         'payment_method' => $paymentMethod,
