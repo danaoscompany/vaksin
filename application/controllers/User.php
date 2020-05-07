@@ -32,6 +32,7 @@ class User extends CI_Controller {
     }
     $this->db->where('id', $slotID);
     $this->db->delete('used_vaccines');
+    echo json_encode($slot);
   }
   
   public function confirm_payment_success() {
