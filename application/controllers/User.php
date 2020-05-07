@@ -78,6 +78,19 @@ class User extends CI_Controller {
     }
   }
   
+  public function get_vaccines() {
+    $vaccines = $this->db->query('SELECT * FROM `vaccines`');
+    for ($i=0; $i<sizeof($vaccines); $i++) {
+      $vaccines[$i]['vaccine_name'] = $this->db->get_where('vaccine_names', array(
+        'id' => intval($vaccines[$i]['vaccine_name_id'])
+      ))->row_array()['name'];
+      $vaccines[$i]['vaccine_type'] = $this->db->get_where('vaccine_types', array(
+        'id' => intval($vaccines[$i]['vaccine_type_id'])
+      ))->row_array()['name'];
+    }
+    echo json_encode($vaccines);
+  }
+  
   public function get_slot() {
     $userID = intval($this->input->post('user_id'));
     $slotID = intval($this->input->post('slot_id'));
