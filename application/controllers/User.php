@@ -9,6 +9,27 @@ class User extends CI_Controller {
     return $obj[$name];
   }
   
+  public function get_histories() {
+    $userID = intval($this->input->post('user_id'));
+    $histories = $this->db->get_where('history', array(
+      'user_id' => $userID
+    ))->result_array();
+    for ($i=0; $i<sizeof($histories); $i++) {
+      $history = $histories[$i];
+      $slot = $this->db->get_where('slots', array(
+        'id' => intval($history['slot_id'])
+      ))->row_array();
+      $usedVaccine = $this->db->get_where('used_vaccines', array(
+        'user_id' => $userID,
+        'slot_id' => intval($history['slot_id'])
+      ))->row_array();
+      $histories[$i]['vaccines'] = $usedVaccine['vaccines'];
+      $histories[$i]['start_date'] = $slot['start_date'];
+      $histories[$i]['end_date'] = $slot['end_date'];
+    }
+    echo json_encode($histories);
+  }
+  
   public function add_history() {
     $userID = intval($this->input->post('user_id'));
     $slotID = intval($this->input->post('slot_id'));
