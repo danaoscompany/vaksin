@@ -79,7 +79,7 @@ class User extends CI_Controller {
   }
   
   public function get_vaccines() {
-    $vaccines = $this->db->query('SELECT * FROM `vaccines`');
+    $vaccines = $this->db->query('SELECT * FROM `vaccines`')->result_array();
     for ($i=0; $i<sizeof($vaccines); $i++) {
       $vaccines[$i]['vaccine_name'] = $this->db->get_where('vaccine_names', array(
         'id' => intval($vaccines[$i]['vaccine_name_id'])
