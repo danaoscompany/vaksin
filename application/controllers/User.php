@@ -9,6 +9,23 @@ class User extends CI_Controller {
     return $obj[$name];
   }
   
+  public function add_history() {
+    $userID = intval($this->input->post('user_id'));
+    $slotID = intval($this->input->post('slot_id'));
+    $date = $this->input->post('date');
+    $results = $this->db->get_where('history', array(
+      'user_id' => $userID,
+      'slot_id' => $slotID
+    ))->result_array();
+    if (sizeof($results) == 0) {
+      $this->db->insert('history', array(
+        'user_id' => $userID,
+        'slot_id' => $slotID,
+        'date' => $date
+      ));
+    }
+  }
+  
   public function purchase() {
     $userID = intval($this->input->post('user_id'));
     $amount = intval($this->input->post('amount'));
