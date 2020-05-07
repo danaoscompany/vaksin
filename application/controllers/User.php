@@ -297,7 +297,6 @@ $this->email->send();
     $slotID = intval($this->input->post('slot_id'));
     $noAnggota = 1;
     $usedVaccines = $this->db->query("SELECT * FROM `used_vaccines` WHERE `slot_id`=" . $slotID . " ORDER BY `no_anggota` DESC LIMIT 1")->result_array();
-    echo json_encode($usedVaccines);
     if (sizeof($usedVaccines) > 0) {
       $noAnggota = $usedVaccines[0]['no_anggota'];
       $noAnggota = intval($noAnggota)+1;
