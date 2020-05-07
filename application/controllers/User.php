@@ -129,6 +129,18 @@ class User extends CI_Controller {
       $results[$i]['end_date'] = $slot['end_date'];
       $results[$i]['slots'] = $slot['slots'];
       $results[$i]['slots_used'] = $slot['slots_used'];
+      $vaccineNameID = intval($this->db->get_where('vaccines', array(
+        'id' => intval($slot['vaccine_id'])
+        ))->row_array()['vaccine_name_id']);
+      $results[$i]['vaccine_name'] = $this->db->get_where('vaccine_names', array(
+        'id' => $vaccineNameID
+      ))->row_array()['name'];
+      $vaccineTypeID = intval($this->db->get_where('vaccines', array(
+        'id' => intval($slot['vaccine_id'])
+        ))->row_array()['vaccine_type_id']);
+      $results[$i]['vaccine_type'] = $this->db->get_where('vaccine_types', array(
+        'id' => $vaccineNameID
+      ))->row_array()['name'];
     }
     echo json_encode($results);
   }
@@ -145,6 +157,18 @@ class User extends CI_Controller {
       $results[$i]['end_date'] = $slot['end_date'];
       $results[$i]['slots'] = $slot['slots'];
       $results[$i]['slots_used'] = $slot['slots_used'];
+      $vaccineNameID = intval($this->db->get_where('vaccines', array(
+        'id' => intval($slot['vaccine_id'])
+        ))->row_array()['vaccine_name_id']);
+      $results[$i]['vaccine_name'] = $this->db->get_where('vaccine_names', array(
+        'id' => $vaccineNameID
+      ))->row_array()['name'];
+      $vaccineTypeID = intval($this->db->get_where('vaccines', array(
+        'id' => intval($slot['vaccine_id'])
+        ))->row_array()['vaccine_type_id']);
+      $results[$i]['vaccine_type'] = $this->db->get_where('vaccine_types', array(
+        'id' => $vaccineNameID
+      ))->row_array()['name'];
     }
     echo json_encode($results);
   }
