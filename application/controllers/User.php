@@ -27,7 +27,7 @@ class User extends CI_Controller {
     $price = intval($slot['price']);
     if ($paid == 1) {
       $this->db->where('id', $userID);
-      $this->db->set('balance', 'balance+' . $price);
+      $this->db->set('balance', 'balance + ' . $price, FALSE);
       $this->db->update('users');
     }
     $this->db->where('id', $slotID);
