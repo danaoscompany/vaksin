@@ -313,6 +313,49 @@ $this->email->send();
     ));
   }
   
+  public function edit_profile() {
+    $userID = intval($this->input->post('user_id'));
+    $name = $this->input->post('name');
+    $address = $this->input->post('address');
+    $age = intval($this->input->post('age'));
+    $email = $this->input->post('email');
+    $phone = $this->input->post('phone');
+    $registrationDate = $this->input->post('registration_date');
+    $profilePictureChanged = intval($this->input->post('profile_picture_changed'));
+    if ($profilePictureChanged == 1) {
+      $config['upload_path'] = './userdata/';
+      $config['allowed_types'] = '*';
+      $config['max_size'] = '2048000';
+      $config['max_width'] = '5000';
+      $config['max_height'] = '5000';
+      $this->load->library('upload', $config);
+      if ($this->upload->do_upload('file')) {
+        $this->db->where('id', $userID);
+        $this->db->update('users', array(
+          'name' => $name,
+          'address' => $address,
+          'age' => $age,
+          'email' => $email,
+          'phone' => $phone,
+          'profile_picture' => $this->upload->data()['file_name'],
+          'registration_date' => $registrationDate,
+          'registration_complete' => 1
+        ));
+      }
+    } else {
+      $this->db->where('id', $userID);
+      $this->db->update('users', array(
+      'name' => $name,
+      'address' => $address,
+      'age' => $age,
+      'email' => $email,
+      'phone' => $phone,
+      'registration_date' => $registrationDate,
+      'registration_complete' => 1
+    ));
+    }
+  }
+  
   public function use_vaccine() {
     $userID = intval($this->input->post('user_id'));
     $slotID = intval($this->input->post('slot_id'));
