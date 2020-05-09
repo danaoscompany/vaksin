@@ -319,8 +319,21 @@ echo $this->email->print_debugger();
     $age = intval($this->input->post('age'));
     $email = $this->input->post('email');
     $phone = $this->input->post('phone');
+    $emailChanged = intval($this->input->post('email_changed'));
     $registrationDate = $this->input->post('registration_date');
     $passwordChanged = intval($this->input->post('password_changed'));
+    if ($emailChanged == 1) {
+      if ($this->db->get_where('users', array(
+        'email' => $email
+      ))->num_rows() > 0) {
+        echo -1;
+        return;
+      }
+      $this->db->where('id', $userID);
+      $this->db->update('users', array(
+        'email' => $email
+      ));
+    }
     if ($passwordChanged == 1) {
       $password = $this->input->post('password');
       $this->db->where('id', $userID);
@@ -361,6 +374,7 @@ echo $this->email->print_debugger();
       'registration_complete' => 1
     ));
     }
+    echo 1;
   }
   
   public function use_vaccine() {
