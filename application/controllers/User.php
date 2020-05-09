@@ -236,12 +236,11 @@ echo $this->email->print_debugger();
     $code = $this->randomNumber(6);
     $email = $this->input->post('email');
     $this->load_email_config();
-$this->email->from('admin@adityap.my.id', 'Probis Vaksin');
-$this->email->to($email); 
-$this->email->subject($title);
-$this->email->message('Mohon verifikasi email Anda dengan memasukkan kode 6 digit berikut: <b>' . $code . '</b>');  
-
-$this->email->send();
+    $this->email->from('admin@adityap.my.id', 'Vaksin Cikarang');
+    $this->email->to($email); 
+    $this->email->subject($title);
+    $this->email->message('Mohon verifikasi email Anda dengan memasukkan kode 6 digit berikut: <b>' . $code . '</b>');  
+    $this->email->send();
       echo json_encode(array(
         'verification_code' => $code
       ));
@@ -321,6 +320,14 @@ $this->email->send();
     $email = $this->input->post('email');
     $phone = $this->input->post('phone');
     $registrationDate = $this->input->post('registration_date');
+    $passwordChanged = intval($this->input->post('password_changed'));
+    if ($passwordChanged == 1) {
+      $password = $this->input->post('password');
+      $this->db->where('id', $userID);
+      $this->db->update('users', array(
+        'password' => $password
+      ));
+    }
     $profilePictureChanged = intval($this->input->post('profile_picture_changed'));
     if ($profilePictureChanged == 1) {
       $config['upload_path'] = './userdata/';
