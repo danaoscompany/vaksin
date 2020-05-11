@@ -456,7 +456,6 @@ echo $this->email->print_debugger();
       $this->db->update('used_vaccines', array(
         'user_id' => $userID,
         'slot_id' => $slotID,
-        'no_anggota' => $noAnggota,
         'vaccines' => $vaccines,
         'price' => $price,
         'payment_method' => $paymentMethod,
