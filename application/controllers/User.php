@@ -98,6 +98,57 @@ class User extends CI_Controller {
       $this->db->where('id', intval($user['id']));
       $this->db->set('balance', 'balance+' . $amount, FALSE);
       $this->db->update('users');
+    } else if ($status == 'FAILED') {
+      $user = $this->db->get_where('users', array(
+          'id' => intval($payment['user_id'])
+      ))->row_array();
+      $pushyToken = $user['pushy_token'];
+      PushyAPI::send_message($pushyToken, 2, 1, 'Pembayaran gagal', "Pembayaran Anda sebesar" . $amount . " gagal", array(
+        'data' => json_encode($obj)
+      ));
+      $this->db->where('external_id', $externalID);
+      $this->db->update('payments', array(
+        'status' => 'FAILED'
+      ));
+    }
+    echo "OK";
+  }
+  
+  public function confirm_withdraw_success() {
+    $obj = json_decode(file_get_contents('php://input'), true);
+    $externalID = $obj['external_id'];
+    $payment = $this->db->get_where('withdraws', array(
+      'external_id' => $externalID
+    ))->row_array();
+    $amount = intval($payment['amount']);
+    $status = $obj['status'];
+    if ($status == 'PAID' || $status == 'SUCCESS') {
+      $user = $this->db->get_where('users', array(
+          'id' => intval($payment['user_id'])
+      ))->row_array();
+      $pushyToken = $user['pushy_token'];
+      PushyAPI::send_message($pushyToken, 2, 1, 'Penarikan berhasil', "Penarikan Anda sebesar" . $amount . " telah berhasil", array(
+        'data' => json_encode($obj)
+      ));
+      $this->db->where('external_id', $externalID);
+      $this->db->update('payments', array(
+        'status' => 'PAID'
+      ));
+      $this->db->where('id', intval($user['id']));
+      $this->db->set('balance', 'balance-' . $amount, FALSE);
+      $this->db->update('users');
+    } else if ($status == 'FAILED') {
+      $user = $this->db->get_where('users', array(
+          'id' => intval($payment['user_id'])
+      ))->row_array();
+      $pushyToken = $user['pushy_token'];
+      PushyAPI::send_message($pushyToken, 2, 1, 'Penarikan gagal', "Penarikan Anda sebesar" . $amount . " gagal", array(
+        'data' => json_encode($obj)
+      ));
+      $this->db->where('external_id', $externalID);
+      $this->db->update('payments', array(
+        'status' => 'FAILED'
+      ));
     }
     echo "OK";
   }
