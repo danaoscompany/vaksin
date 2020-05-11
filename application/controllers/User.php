@@ -153,6 +153,7 @@ class User extends CI_Controller {
     echo "OK";
   }
   
+  
   public function find_online_admins() {
     $userID = intval($this->input->post('user_id'));
     $name = $this->db->get_where('users', array(
