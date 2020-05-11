@@ -114,7 +114,7 @@ class User extends CI_Controller {
     echo "OK";
   }
   
-  public function confirm_withdraw_success() {
+  public function confirm_withdraw() {
     $obj = json_decode(file_get_contents('php://input'), true);
     $externalID = $obj['external_id'];
     $payment = $this->db->get_where('withdraws', array(
