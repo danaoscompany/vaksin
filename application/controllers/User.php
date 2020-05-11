@@ -117,6 +117,10 @@ class User extends CI_Controller {
   public function update_withdraw_status() {
     $obj = json_decode(file_get_contents('php://input'), true);
     $externalID = $obj['external_id'];
+    $this->db->where('external_id', $externalID);
+    $this->db->update('withdraws', array(
+        'status_payload' => json_encode($obj)
+      ));
     $payment = $this->db->get_where('withdraws', array(
       'external_id' => $externalID
     ))->row_array();
