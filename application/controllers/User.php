@@ -32,6 +32,9 @@ class User extends CI_Controller {
           ))->row_array()['name'];
     PushyAPI::send_message("admin", $admin['pushy_token'], 5, 1, 'Pesan baru', $shortMessage, array(
         'data' => json_encode($messageInfo)
+        ,
+        'user_id' => $userID,
+        'message_id' => $lastID
       ));
     $row = $this->db->get_where('messages', array(
             'id' => $lastID
