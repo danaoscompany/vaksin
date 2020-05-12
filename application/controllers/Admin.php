@@ -2,6 +2,23 @@
 
 class Admin extends CI_Controller {
   
+  public function get_chats() {
+    $adminID = intval($this->input->post('admin_id'));
+    $results = $this->db->query("SELECT * FROM `messages` WHERE `admin_id`=" . $adminID)->result_array();
+    $chats = [];
+    for ($i=0; $i<sizeof($results); $i++) {
+      $row = $results[$i];
+      $chat = $this->db->query("SELECT * FROM `messages` WHERE `user_id`=" . intval($row['user_id']) . " AND `admin_id`=" . intval($row['admin_id'])))->row_array();
+      $userInfo = $this->db->get_where('users', array(
+        'id' => intval($row['user_id'])
+      ))->row_array();
+      $chat['profile_picture'] = $userInfo['profile_picture'];
+      $chat['name'] = $userInfo['name'];
+      array_push($chats, $chat);
+    }
+    echo json_encode($chats);
+  }
+  
   public function edit_article() {
     $articleID = intval($this->input->post('article_id'));
     $title = $this->input->post('title');
