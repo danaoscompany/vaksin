@@ -16,6 +16,12 @@ class Admin extends CI_Controller {
         'chat_with_admin_id' => $adminID
       ));
       $this->db->query("DELETE FROM `messages` WHERE `user_id`=" . $userID . " AND `admin_id`=" . $adminID . " AND `type`=1");
+      $user = $this->db->get_where('users', array(
+        'id' => $userID
+      ))->row_array();
+      PushyAPI::send_message("user", $user['pushy_token'], 4, 1, 'Obrolan dengan Admin sedang aktif', 'Klik untuk memulai', array(
+        'admin_id' => "" . $adminID
+      ));
       echo 1;
     } else {
       $this->db->query("DELETE FROM `messages` WHERE `user_id`=" . $userID . " AND `admin_id`=" . $adminID . " AND `type`=1");
