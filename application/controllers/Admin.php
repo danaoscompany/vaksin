@@ -20,7 +20,7 @@ class Admin extends CI_Controller {
         'id' => $userID
       ))->row_array();
       PushyAPI::send_message("user", $user['pushy_token'], 4, 1, 'Obrolan dengan Admin sedang aktif', 'Klik untuk memulai', array(
-        'admin_id' => "" . $adminID
+        'admin_id' => 123
       ));
       echo 1;
     } else {
