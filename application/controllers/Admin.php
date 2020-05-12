@@ -20,9 +20,9 @@ class Admin extends CI_Controller {
         'id' => $userID
       ))->row_array();
       PushyAPI::send_message("user", $user['pushy_token'], 4, 1, 'Obrolan dengan Admin sedang aktif', 'Klik untuk memulai', array(
-        'admin_id' => 123
+        'admin_id' => $adminID
       ));
-      echo 1;
+      echo "Admin ID: " . $adminID;
     } else {
       $this->db->query("DELETE FROM `messages` WHERE `user_id`=" . $userID . " AND `admin_id`=" . $adminID . " AND `type`=1");
       echo -1;
