@@ -162,7 +162,7 @@ class User extends CI_Controller {
     $name = $this->db->get_where('users', array(
       'id' => $userID
     ))->row_array()['name'];
-    $admins = $this->db->query("SELECT * FROM `admins`");
+    $admins = $this->db->query("SELECT * FROM `admins`")->result_array();
     for ($i=0; $i<sizeof($admins); $i++) {
       $admin = $admins[$i];
       $pushyToken = $admin['pushy_token'];
