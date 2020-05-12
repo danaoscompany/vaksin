@@ -1,5 +1,7 @@
 <?php
 
+require('Message.php');
+
 class Admin extends CI_Controller {
   
   public function send_message() {
