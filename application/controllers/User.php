@@ -157,18 +157,25 @@ class User extends CI_Controller {
     echo "OK";
   }
   
-  
   public function find_online_admins() {
     $userID = intval($this->input->post('user_id'));
     $name = $this->db->get_where('users', array(
       'id' => $userID
     ))->row_array()['name'];
-    $admins = $this->db->query("SELECT * FROM `admins` WHERE `chatting_with_user`=0");
+    $admins = $this->db->query("SELECT * FROM `admins`");
     for ($i=0; $i<sizeof($admins); $i++) {
       $admin = $admins[$i];
       $pushyToken = $admin['pushy_token'];
       PushyAPI::send_message($pushyToken, 1, 1, 'Pesan baru', "Anda mendapat 1 permintaan pesan baru dari " . $name, array(
           ));
+      $adminID = intval($admin['id']);
+      $this->db->where('admin_id', $adminID)->where('user_id', $userID)->where('type', 1);
+      $this->db->delete('messages');
+      $this->db->insert('messages', array(
+        'admin_id' => $adminID,
+        'type' => 1,
+        'user_id' => $userID
+      ));
     }
   }
   
