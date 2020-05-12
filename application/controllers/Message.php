@@ -60,7 +60,7 @@ class PushyAPI {
         }
     }
     
-    static public function send_message($toRole, $toRole, $notificationType, $showNotification, $title, $body, $data) {
+    static public function send_message($toRole, $token, $notificationType, $showNotification, $title, $body, $data) {
       $to = array($token);
       $data['title'] = $title;
       $data['body'] = $body;
