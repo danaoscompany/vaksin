@@ -50,8 +50,10 @@ class Admin extends CI_Controller {
         'id' => $userID
       ))->row_array();
     
-    PushyAPI::send_message("user", $user['pushy_token'], 3, 1, 'Pesan baru', $shortMessage, array(
-        'message_id' => "" . $lastID
+    PushyAPI::send_message("user", $user['pushy_token'], 5, 1, 'Pesan baru', $shortMessage, array(
+        'data' => json_encode($this->db->get_where('messages', array(
+          'id' => $lastID
+        ))->row_array())
       ));
     $row = $this->db->get_where('messages', array(
             'id' => $lastID
@@ -86,7 +88,11 @@ class Admin extends CI_Controller {
           $user = $this->db->get_where('users', array(
               'id' => $userID
             ))->row_array();
-          PushyAPI::send_message("user", $user['pushy_token'], 3, 1, 'Pesan baru', $shortMessage);
+          PushyAPI::send_message("user", $user['pushy_token'], 5, 1, 'Pesan baru', $shortMessage, array(
+              'data' => json_encode($this->db->get_where('messages', array(
+              'id' => $lastID
+            ))->row_array())
+          ));
           $row = $this->db->get_where('messages', array(
             'id' => $lastID
           ))->row_array();
