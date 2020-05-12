@@ -84,7 +84,7 @@ class Admin extends CI_Controller {
       $chat['name'] = $userInfo['name'];
       array_push($chats, $chat);
     }
-    $results = $this->db->query("SELECT * FROM `messages` WHERE `admin_id`=" . $adminID . " AND `type`!=1")->result_array();
+    $results = $this->db->query("SELECT * FROM `messages` WHERE `admin_id`=" . $adminID . " AND `type`!=1 ORDER BY `date` DESC LIMIT 1")->result_array();
     for ($i=0; $i<sizeof($results); $i++) {
       $row = $results[$i];
       $chat = $this->db->query("SELECT * FROM `messages` WHERE `user_id`=" . intval($row['user_id']) . " AND `admin_id`=" . intval($row['admin_id']))->row_array();
