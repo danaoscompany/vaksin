@@ -80,6 +80,23 @@ class User extends CI_Controller {
     return $obj[$name];
   }
   
+  public function get_messages() {
+    $start = intval($this->input->post('start'));
+    $length = intval($this->input->post('length'));
+    $this->db->limit($length, $start);
+    $this->db->order_by('date', 'DESC');
+    $messages = $this->db->get('messages')->result_array();
+    for ($i=0; $i<sizeof($messages); $i++) {
+      $messages[$i]['user_name'] = $this->db->get_where('users', array(
+        'id' => intval($messages[$i]['user_id'])
+      ))->row_array()['name'];
+      $messages[$i]['admin_name'] = $this->db->get_where('admins', array(
+        'id' => intval($messages[$i]['admin_id'])
+      ))->row_array()['name'];
+    }
+    echo json_encode($messages);
+  }
+  
   public function get_histories() {
     $userID = intval($this->input->post('user_id'));
     $histories = $this->db->get_where('history', array(
