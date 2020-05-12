@@ -2,6 +2,72 @@
 
 class Admin extends CI_Controller {
   
+  public function send_message() {
+    $message = $this->input->post('message');
+    $shortMessage = $message;
+    if (strlen($message) > 60) {
+      $shortMessage = substr($message, 0, 60);
+    }
+    $userID = intval($this->input->post('user_id'));
+    $adminID = intval($this->input->post('admin_id'));
+    $date = $this->input->post('date');
+    $this->db->insert('messages', array(
+      'user_id' => $userID,
+      'admin_id' => $adminID,
+      'message' => $message,
+      'date' => $date
+    ));
+    $lastID = intval($this->db->insert_id());
+    $user = $this->db->get_where('users', array(
+        'id' => $userID
+      ))->row_array();
+    
+    PushyAPI::send_message("user", $user['pushy_token'], 3, 1, 'Pesan baru', $shortMessage, array(
+        'message_id' => "" . $lastID
+      ));
+    $row = $this->db->get_where('messages', array(
+            'id' => $lastID
+          ))->row_array();
+    $row['name'] = $this->db->get_where('users', array(
+      'id' => $senderID
+    ))->row_array()['name'];
+    echo json_encode($row);
+  }
+  
+  public function send_image() {
+    $userID = intval($this->input->post('user_id'));
+    $adminID = intval($this->input->post('admin_id'));
+    $date = $this->input->post('date');
+    $config = array(
+        'upload_path' => './userdata',
+        'allowed_types' => "gif|jpg|png|jpeg",
+        'overwrite' => TRUE,
+        'max_size' => "2048000"
+        );
+        $this->load->library('upload', $config);
+        if($this->upload->do_upload('file')) { 
+          $this->db->insert('messages', array(
+            'user_id' => $userID,
+            'admin_id' => $adminID,
+            'message' => '',
+            'image' => $this->upload->data()['file_name'],
+            'date' => $date
+          ));
+          $lastID = intval($this->db->insert_id());
+          $user = $this->db->get_where('users', array(
+              'id' => $userID
+            ))->row_array();
+          PushyAPI::send_message("user", $user['pushy_token'], 3, 1, 'Pesan baru', $shortMessage);
+          $row = $this->db->get_where('messages', array(
+            'id' => $lastID
+          ))->row_array();
+          $row['name'] = $this->db->get_where('users', array(
+            'id' => $senderID
+          ))->row_array()['name'];
+          echo json_encode($row);
+        }
+  }
+  
   public function get_chats() {
     $adminID = intval($this->input->post('admin_id'));
     $chats = [];
