@@ -30,8 +30,8 @@ class Admin extends CI_Controller {
     $row = $this->db->get_where('messages', array(
             'id' => $lastID
           ))->row_array();
-    $row['name'] = $this->db->get_where('users', array(
-      'id' => $senderID
+    $row['name'] = $this->db->get_where('admins', array(
+      'id' => $adminID
     ))->row_array()['name'];
     echo json_encode($row);
   }
@@ -63,8 +63,8 @@ class Admin extends CI_Controller {
           $row = $this->db->get_where('messages', array(
             'id' => $lastID
           ))->row_array();
-          $row['name'] = $this->db->get_where('users', array(
-            'id' => $senderID
+          $row['name'] = $this->db->get_where('admins', array(
+            'id' => $adminID
           ))->row_array()['name'];
           echo json_encode($row);
         }

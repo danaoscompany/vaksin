@@ -30,7 +30,7 @@ class User extends CI_Controller {
             'id' => $lastID
           ))->row_array();
     $row['name'] = $this->db->get_where('users', array(
-      'id' => $senderID
+      'id' => $userID
     ))->row_array()['name'];
     echo json_encode($row);
   }
@@ -63,7 +63,7 @@ class User extends CI_Controller {
             'id' => $lastID
           ))->row_array();
           $row['name'] = $this->db->get_where('users', array(
-            'id' => $senderID
+            'id' => $userID
           ))->row_array()['name'];
           echo json_encode($row);
         }
