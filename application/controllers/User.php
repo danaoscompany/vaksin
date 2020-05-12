@@ -169,6 +169,7 @@ class User extends CI_Controller {
       PushyAPI::send_message($pushyToken, 1, 1, 'Pesan baru', "Anda mendapat 1 permintaan pesan baru dari " . $name, array(
           ));
       $adminID = intval($admin['id']);
+      echo "Sending message to " . $adminID . " with Pushy token " . $pushyToken . "\n";
       $this->db->where('admin_id', $adminID)->where('user_id', $userID)->where('type', 1);
       $this->db->delete('messages');
       $this->db->insert('messages', array(
