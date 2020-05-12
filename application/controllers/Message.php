@@ -1,9 +1,14 @@
 <?php
 
 class PushyAPI {
-    static public function sendPushNotification($data, $to, $options) {
+    static public function sendPushNotification($toRole, $data, $to, $options) {
         // Insert your Secret API Key here
-        $apiKey = '03f12a4085603bcaa599ecfd667b3cc19b29f4ee53a7474db68f9240d5f6c378';
+        $apiKey = "";
+        if ($toRole == 'admin') {
+          $apiKey = "d047de41a922b5b900d7d6cf1af40c33cdb9ddb06c018a51ed8cd94dfe0c4dce";
+        } else if ($toRole == 'user') {
+          $apiKey = '03f12a4085603bcaa599ecfd667b3cc19b29f4ee53a7474db68f9240d5f6c378';
+        }
 
         // Default post data to provided options or empty array
         $post = $options ?: array();
@@ -55,7 +60,7 @@ class PushyAPI {
         }
     }
     
-    static public function send_message($token, $notificationType, $showNotification, $title, $body, $data) {
+    static public function send_message($token, $toRole, $notificationType, $showNotification, $title, $body, $data) {
       $to = array($token);
       $data['title'] = $title;
       $data['body'] = $body;
@@ -67,6 +72,6 @@ class PushyAPI {
           'body'  => $body
         )
       );
-      PushyAPI::sendPushNotification($data, $to, $options);
+      PushyAPI::sendPushNotification($toRole, $data, $to, $options);
     }
 }

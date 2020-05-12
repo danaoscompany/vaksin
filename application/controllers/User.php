@@ -4,6 +4,12 @@ require('Message.php');
 
 class User extends CI_Controller {
   
+  public function test_notification() {
+    $token = "e63c693662a264646c1591";
+    PushyAPI::send_message("admin", $token, 2, 1, 'Pembayaran berhasil', "Pembayaran Anda sebesar 10000 telah berhasil", array(
+      ));
+  }
+  
   private function post($name) {
     $obj = json_decode(file_get_contents('php://input'), true);
     return $obj[$name];
@@ -88,7 +94,7 @@ class User extends CI_Controller {
           'id' => intval($payment['user_id'])
       ))->row_array();
       $pushyToken = $user['pushy_token'];
-      PushyAPI::send_message($pushyToken, 2, 1, 'Pembayaran berhasil', "Pembayaran Anda sebesar" . $amount . " telah berhasil", array(
+      PushyAPI::send_message("admin, $pushyToken, 2, 1, 'Pembayaran berhasil', "Pembayaran Anda sebesar" . $amount . " telah berhasil", array(
         'data' => json_encode($obj)
       ));
       $this->db->where('external_id', $externalID);
@@ -103,7 +109,7 @@ class User extends CI_Controller {
           'id' => intval($payment['user_id'])
       ))->row_array();
       $pushyToken = $user['pushy_token'];
-      PushyAPI::send_message($pushyToken, 2, 1, 'Pembayaran gagal', "Pembayaran Anda sebesar" . $amount . " gagal", array(
+      PushyAPI::send_message("admin", $pushyToken, 2, 1, 'Pembayaran gagal', "Pembayaran Anda sebesar" . $amount . " gagal", array(
         'data' => json_encode($obj)
       ));
       $this->db->where('external_id', $externalID);
@@ -131,7 +137,7 @@ class User extends CI_Controller {
           'id' => intval($payment['user_id'])
       ))->row_array();
       $pushyToken = $user['pushy_token'];
-      PushyAPI::send_message($pushyToken, 2, 1, 'Penarikan berhasil', "Penarikan Anda sebesar" . $amount . " telah berhasil", array(
+      PushyAPI::send_message("admin", $pushyToken, 2, 1, 'Penarikan berhasil', "Penarikan Anda sebesar" . $amount . " telah berhasil", array(
         'data' => json_encode($obj)
       ));
       $this->db->where('external_id', $externalID);
@@ -146,7 +152,7 @@ class User extends CI_Controller {
           'id' => intval($payment['user_id'])
       ))->row_array();
       $pushyToken = $user['pushy_token'];
-      PushyAPI::send_message($pushyToken, 2, 1, 'Penarikan gagal', "Penarikan Anda sebesar" . $amount . " gagal", array(
+      PushyAPI::send_message("admin", $pushyToken, 2, 1, 'Penarikan gagal', "Penarikan Anda sebesar" . $amount . " gagal", array(
         'data' => json_encode($obj)
       ));
       $this->db->where('external_id', $externalID);
@@ -166,7 +172,7 @@ class User extends CI_Controller {
     for ($i=0; $i<sizeof($admins); $i++) {
       $admin = $admins[$i];
       $pushyToken = $admin['pushy_token'];
-      PushyAPI::send_message($pushyToken, 1, 1, 'Pesan baru', "Anda mendapat 1 permintaan pesan baru dari " . $name, array(
+      PushyAPI::send_message("admin", $pushyToken, 1, 1, 'Pesan baru', "Anda mendapat 1 permintaan pesan baru dari " . $name, array(
           ));
       $adminID = intval($admin['id']);
       echo "Sending message to " . $adminID . " with Pushy token " . $pushyToken . "\n";
