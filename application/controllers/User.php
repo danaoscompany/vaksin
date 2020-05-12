@@ -24,8 +24,14 @@ class User extends CI_Controller {
     $admin = $this->db->get_where('admins', array(
         'id' => $adminID
       ))->row_array();
-    PushyAPI::send_message("admin", $admin['pushy_token'], 3, 1, 'Pesan baru', $shortMessage, array(
-        'message_id' => "" . $lastID
+    $messageInfo = $this->db->get_where('messages', array(
+            'id' => $lastID
+          ))->row_array();
+    $messageInfo['user_name'] = $this->db->get_where('users', array(
+            'id' => $userID
+          ))->row_array()['name'];
+    PushyAPI::send_message("admin", $admin['pushy_token'], 5, 1, 'Pesan baru', $shortMessage, array(
+        'data' => json_encode($messageInfo)
       ));
     $row = $this->db->get_where('messages', array(
             'id' => $lastID
@@ -60,9 +66,15 @@ class User extends CI_Controller {
           $admin = $this->db->get_where('admins', array(
               'id' => $adminID
             ))->row_array();
+          $messageInfo = $this->db->get_where('messages', array(
+            'id' => $lastID
+          ))->row_array();
+          $messageInfo['user_name'] = $this->db->get_where('users', array(
+            'id' => $userID
+          ))->row_array()['name'];
           PushyAPI::send_message("admin", $admin['pushy_token'], 3, 1, 'Pesan baru', $shortMessage);
           $row = $this->db->get_where('messages', array(
-            'id' => $lastID
+            'data' => json_encode($messageInfo)
           ))->row_array();
           $row['user_name'] = $this->db->get_where('users', array(
             'id' => $userID
