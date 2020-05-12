@@ -17,6 +17,7 @@ class User extends CI_Controller {
       'user_id' => $userID,
       'admin_id' => $adminID,
       'message' => $message,
+      'sender' => 'user',
       'date' => $date
     ));
     $lastID = intval($this->db->insert_id());
@@ -51,6 +52,7 @@ class User extends CI_Controller {
             'user_id' => $userID,
             'admin_id' => $adminID,
             'message' => '',
+            'sender' => 'user',
             'image' => $this->upload->data()['file_name'],
             'date' => $date
           ));

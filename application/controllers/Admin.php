@@ -16,6 +16,7 @@ class Admin extends CI_Controller {
     $this->db->insert('messages', array(
       'user_id' => $userID,
       'admin_id' => $adminID,
+      'sender' => 'admin',
       'message' => $message,
       'date' => $date
     ));
@@ -52,6 +53,7 @@ class Admin extends CI_Controller {
             'user_id' => $userID,
             'admin_id' => $adminID,
             'message' => '',
+            'sender' => 'admin',
             'image' => $this->upload->data()['file_name'],
             'date' => $date
           ));
