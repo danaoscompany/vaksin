@@ -18,6 +18,16 @@ class Main extends CI_Controller {
     echo json_encode($this->db->query($cmd)->result_array());
   }
   
+  public function insert() {
+    $tableName = $this->input->post('table_name');
+    $data = $this->input->post('data');
+    $this->db->insert($tableName, json_decode($data, true));
+    $lastID = intval($this->db->insert_id());
+    echo json_encode($this->db->get_where($tableName, array(
+      'id' => $lastID
+    ))->row_array());
+  }
+  
   public function get_user_by_email_password() {
     echo 1;
   }
