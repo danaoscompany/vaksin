@@ -4,6 +4,21 @@ require('Message.php');
 
 class User extends CI_Controller {
   
+  public function add_ad() {
+    $config = array(
+        'upload_path' => './userdata',
+        'allowed_types' => "gif|jpg|png|jpeg",
+        'overwrite' => TRUE,
+        'max_size' => "2048000"
+        );
+        $this->load->library('upload', $config);
+        if($this->upload->do_upload('file')) { 
+          $this->db->insert('ads', array(
+            'img' => $this->upload->data()['file_name']
+          ));
+        }
+  }
+  
   public function send_message() {
     $message = $this->input->post('message');
     $shortMessage = $message;
