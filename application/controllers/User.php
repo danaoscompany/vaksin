@@ -466,7 +466,7 @@ echo $this->email->print_debugger();
     $userID = intval($this->input->post('user_id'));
     $name = $this->input->post('name');
     $address = $this->input->post('address');
-    $age = intval($this->input->post('age'));
+    $birthday = $this->input->post('birthday');
     $parentName = $this->input->post('parent_name');
     $phone = $this->input->post('phone');
     $lastVaccineDate = $this->input->post('last_vaccine_date');
@@ -483,7 +483,7 @@ echo $this->email->print_debugger();
       'no_anggota' => $noAnggota,
       'name' => $name,
       'address' => $address,
-      'age' => $age,
+      'birthday' => $birthday,
       'parent_name' => $parentName,
       'phone' => $phone,
       'last_vaccine_date' => $lastVaccineDate,
