@@ -57,7 +57,7 @@ class User extends CI_Controller {
               $vaccines .= ", ";
             }
           }
-          $this->send_reminder_email('danaoscompany@gmail.com', $vaccines);
+          $this->send_reminder_email($email, $vaccines);
         }
       }
     }
