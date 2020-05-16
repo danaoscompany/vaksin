@@ -22,7 +22,7 @@ class User extends CI_Controller {
     $this->email->to($email);
     $this->email->subject('Pengingat Vaksin');
     $message = file_get_contents('https://rumahvaksincikarang.com/vaksin/userdata/email_template.html');
-    $message = str_replace($message, '[ISI VAKSIN DI SINI]', $vaccines);
+    $message = str_replace('[ISI VAKSIN DI SINI]', $vaccines, $message);
     $this->email->message($message);  
     $this->email->send();
   }
@@ -57,7 +57,6 @@ class User extends CI_Controller {
               $vaccines .= ", ";
             }
           }
-          echo $vaccines . "<br/>";
           $this->send_reminder_email('danaoscompany@gmail.com', $vaccines);
         }
       }
