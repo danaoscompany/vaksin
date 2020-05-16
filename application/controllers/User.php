@@ -25,7 +25,7 @@ class User extends CI_Controller {
       $birthDate = DateTime::createFromFormat('Y:m:d H:i:s', $user['birthday']);
       $diff = $currentDate->diff($birthDate);
       echo "Month difference: " . $diff->m . "<br>";
-      $timelines = $this->db->get_where('timeline', array(
+      $timelines = $this->db->get_where('timelines', array(
         'month' => intval($diff->m)
       ))->result_array();
       if (sizeof($timelines) > 0) {
