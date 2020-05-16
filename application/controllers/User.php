@@ -4,6 +4,39 @@ require('Message.php');
 
 class User extends CI_Controller {
   
+  public function email_test() {
+    $email = 'danaoscompany@gmail.com';
+    $this->load_email_config();
+    $this->email->from('admin@adityap.my.id', 'Vaksin Cikarang');
+    $this->email->to($email); 
+    $this->email->subject('Tes Email');
+    $this->email->message('Ini adalah <b>email</b>, <i>email</i>.');  
+    $this->email->send();
+  }
+  
+  public function remind_vaccine() {
+    date_default_timezone_set('Asia/Jakarta');
+    $currentDate = date('Y:m:d H:i:s');
+    $users = $this->db->get('users');
+    for ($i=0; $i<sizeof($users); $i++) {
+      $user = $users[$i];
+      $birthDate = $user['birthday'];
+      $diff = $currentDate->diff($birthDate);
+      $timelines = $this->db->get_where('timeline', array(
+        'month' => intval($diff->m)
+      ))->result_array();
+      if (sizeof($timelines) > 0) {
+        $timeline = $timelines[0];
+        $scheduleSent = $this->db->get_where('schedule_sent', array(
+          'timeline_id' => intval($timeline['id'])
+        ))->result_array();
+        if (sizeof($scheduleSent) == 0) {
+          
+        }
+      }
+    }
+  }
+  
   public function add_ad() {
     $config = array(
         'upload_path' => './userdata',
