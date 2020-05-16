@@ -51,12 +51,10 @@ class User extends CI_Controller {
             'timeline_id' => intval($timeline['id']),
             'user_id' => intval($user['id'])
           ));
-          $vaccinesJSON = $this->db->get_where('timelines', array(
-            'id' => intval($timeline['id'])
-          ))->result_array();
+          $vaccinesJSON = json_decode($timeline['vaccines'], true);
           $vaccines = "";
           for ($j=0; $j<sizeof($vaccinesJSON); $j++) {
-            $vaccines .= $vaccinesJSON[$j]['vaccines'];
+            $vaccines .= $vaccinesJSON[$j];
             if ($j < sizeof($vaccinesJSON)-1) {
               $vaccines .= ", ";
             }
