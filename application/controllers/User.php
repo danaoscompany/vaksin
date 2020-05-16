@@ -19,10 +19,10 @@ class User extends CI_Controller {
   private function send_reminder_email($email, $vaccines) {
     $this->load_email_config();
     $this->email->from('admin@adityap.my.id', 'Vaksin Cikarang');
-    $this->email->to('danaoscompany@gmail.com'); 
+    $this->email->to($email);
     $this->email->subject('Pengingat Vaksin');
     $message = file_get_contents('https://rumahvaksincikarang.com/vaksin/userdata/email_template.html');
-    //$message = str_replace($message, '[ISI VAKSIN DI SINI]', $vaccines);
+    $message = str_replace($message, '[ISI VAKSIN DI SINI]', $vaccines);
     $this->email->message($message);  
     $this->email->send();
   }
@@ -44,24 +44,19 @@ class User extends CI_Controller {
           'timeline_id' => intval($timeline['id']),
           'user_id' => intval($user['id'])
         ))->result_array();
-        echo "Size of schedule_sent: " . sizeof($scheduleSent) . ", ";
         if (sizeof($scheduleSent) == 0) {
           $this->db->insert('schedule_sent', array(
             'timeline_id' => intval($timeline['id']),
             'user_id' => intval($user['id'])
           ));
-          echo "Vaccines: " . $timeline['vaccines'] . ", ";
           $vaccinesJSON = json_decode($timeline['vaccines'], true);
           $vaccines = "";
-          echo "Size of vaccinesJSON: " . sizeof($vaccinesJSON) . ", ";
-          echo "Vaccines JSON: " . json_encode($vaccinesJSON) . ", ";
           for ($j=0; $j<sizeof($vaccinesJSON); $j++) {
             $vaccines .= $vaccinesJSON[$j];
             if ($j < sizeof($vaccinesJSON)-1) {
               $vaccines .= ", ";
             }
           }
-          echo "Vaccines: " . $vaccines . "<br/>";
           $this->send_reminder_email($user['email'], $vaccines);
         }
       }
