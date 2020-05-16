@@ -56,7 +56,7 @@ class User extends CI_Controller {
           ))->result_array();
           $vaccines = "";
           for ($j=0; $j<sizeof($vaccinesJSON); $j++) {
-            $vaccines .= $vaccinesJSON[$j];
+            $vaccines .= $vaccinesJSON[$j]['vaccines'];
             if ($j < sizeof($vaccinesJSON)-1) {
               $vaccines .= ", ";
             }
