@@ -10,7 +10,7 @@ class User extends CI_Controller {
     $this->email->from('admin@adityap.my.id', 'Vaksin Cikarang');
     $this->email->to($email); 
     $this->email->subject('Tes Email');
-    $message = file_get_contents('https://rumahvaksinasicikarang.com/vaksin/userdata/email_template.html');
+    $message = file_get_contents('https://rumahvaksincikarang.com/vaksin/userdata/email_template.html');
     $this->email->message($message);  
     $this->email->send();
     echo $message;
