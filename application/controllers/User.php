@@ -23,7 +23,7 @@ class User extends CI_Controller {
     for ($i=0; $i<sizeof($users); $i++) {
       $user = $users[$i];
       echo "Birthday: " . $user['birthday'] . ", ";
-      $birthDate = DateTime::createFromFormat('Y:m:d H:i:s', hsl(192,100%,50%)['birthday']);
+      $birthDate = DateTime::createFromFormat('Y:m:d H:i:s', $user['birthday']);
       $diff = $currentDate->diff($birthDate);
       echo "Month difference: " . $diff->m . "<br>";
       $timelines = $this->db->get_where('timelines', array(
