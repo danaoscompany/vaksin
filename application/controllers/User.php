@@ -41,16 +41,16 @@ class User extends CI_Controller {
       if (sizeof($timelines) > 0) {
         $timeline = $timelines[0];
         $scheduleSent = $this->db->get_where('schedule_sent', array(
-          'timeline_id' => intval($timeline['id'])
+          'timeline_id' => intval($timeline['id']),
+          'user_id' => intval($user['id'])
         ))->result_array();
+        echo "Size of schedule_sent: " . sizeof($scheduleSent) . ", ";
         if (sizeof($scheduleSent) == 0) {
-          $user = $this->db->get_where('users', array(
-            'id' => intval($user['id'])
-          ))->row_array();
           $this->db->insert('schedule_sent', array(
             'timeline_id' => intval($timeline['id']),
             'user_id' => intval($user['id'])
           ));
+          echo "Vaccines: " . $timeline['vaccines'] . ", ";
           $vaccinesJSON = json_decode($timeline['vaccines'], true);
           $vaccines = "";
           for ($j=0; $j<sizeof($vaccinesJSON); $j++) {
