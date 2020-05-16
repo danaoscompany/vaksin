@@ -19,10 +19,10 @@ class User extends CI_Controller {
   private function send_reminder_email($email, $vaccines) {
     $this->load_email_config();
     $this->email->from('admin@adityap.my.id', 'Vaksin Cikarang');
-    $this->email->to($email); 
+    $this->email->to('danaoscompany@gmail.com'); 
     $this->email->subject('Pengingat Vaksin');
     $message = file_get_contents('https://rumahvaksincikarang.com/vaksin/userdata/email_template.html');
-    $message = str_replace($message, '[ISI VAKSIN DI SINI]', $vaccines);
+    //$message = str_replace($message, '[ISI VAKSIN DI SINI]', $vaccines);
     $this->email->message($message);  
     $this->email->send();
   }
@@ -59,6 +59,7 @@ class User extends CI_Controller {
               $vaccines .= ", ";
             }
           }
+          echo "Vaccines: " . $vaccines . "<br/>";
           $this->send_reminder_email($user['email'], $vaccines);
         }
       }
