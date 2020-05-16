@@ -16,16 +16,25 @@ class User extends CI_Controller {
     echo $message;
   }
   
+  private function send_reminder_email($email, $vaccines) {
+    $this->load_email_config();
+    $this->email->from('admin@adityap.my.id', 'Vaksin Cikarang');
+    $this->email->to($email); 
+    $this->email->subject('Pengingat Vaksin');
+    $message = file_get_contents('https://rumahvaksincikarang.com/vaksin/userdata/email_template.html');
+    $message = str_replace($message, '[ISI VAKSIN DI SINI]', $vaccines);
+    $this->email->message($message);  
+    $this->email->send();
+  }
+  
   public function remind_vaccine() {
     date_default_timezone_set('Asia/Jakarta');
     $currentDate = DateTime::createFromFormat('Y-m-d h:i:s', date('Y-m-d H:i:s'));
     $users = $this->db->get('users')->result_array();
     for ($i=0; $i<sizeof($users); $i++) {
       $user = $users[$i];
-      echo "Birthday: " . $user['birthday'] . ", ";
       $birthDate = DateTime::createFromFormat('Y-m-d H:i:s', $user['birthday']);
       $diff = $currentDate->diff($birthDate);
-      echo "Month difference: " . $diff->m . "<br>";
       $timelines = $this->db->get_where('timelines', array(
         'month' => intval($diff->m)
       ))->result_array();
@@ -35,10 +44,24 @@ class User extends CI_Controller {
           'timeline_id' => intval($timeline['id'])
         ))->result_array();
         if (sizeof($scheduleSent) == 0) {
+          $user = $this->db->get_where('users', array(
+            'id' => intval($user['id'])
+          ))->row_array();
           $this->db->insert('schedule_sent', array(
             'timeline_id' => intval($timeline['id']),
             'user_id' => intval($user['id'])
           ));
+          $vaccinesJSON = $this->db->get_where('timelines', array(
+            'id' => intval($timeline['id'])
+          ))->result_array();
+          $vaccines = "";
+          for ($j=0; $j<sizeof($vaccinesJSON); $j++) {
+            $vaccines .= $vaccinesJSON[$j];
+            if ($j < sizeof($vaccinesJSON)-1) {
+              $vaccines .= ", ";
+            }
+          }
+          $this->send_reminder_email($user['email'], $vaccines);
         }
       }
     }
