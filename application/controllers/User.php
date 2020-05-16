@@ -18,12 +18,13 @@ class User extends CI_Controller {
   
   public function remind_vaccine() {
     date_default_timezone_set('Asia/Jakarta');
-    $currentDate = date('Y:m:d H:i:s');
+    $currentDate = strtotime(date('Y:m:d H:i:s'));
     $users = $this->db->get('users');
     for ($i=0; $i<sizeof($users); $i++) {
       $user = $users[$i];
-      $birthDate = $user['birthday'];
+      $birthDate = strtotime($user['birthday']);
       $diff = $currentDate->diff($birthDate);
+      echo "Month difference: " . $diff->m . "<br>";
       $timelines = $this->db->get_where('timeline', array(
         'month' => intval($diff->m)
       ))->result_array();
@@ -33,7 +34,10 @@ class User extends CI_Controller {
           'timeline_id' => intval($timeline['id'])
         ))->result_array();
         if (sizeof($scheduleSent) == 0) {
-          
+          $this->db->insert('schedule_sent', array(
+            'timeline_id' => intval($timeline['id']),
+            'user_id' => intval($user['id'])
+          ));
         }
       }
     }
