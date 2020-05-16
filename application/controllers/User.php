@@ -53,6 +53,8 @@ class User extends CI_Controller {
           echo "Vaccines: " . $timeline['vaccines'] . ", ";
           $vaccinesJSON = json_decode($timeline['vaccines'], true);
           $vaccines = "";
+          echo "Size of vaccinesJSON: " . sizeof($vaccinesJSON) . ", ";
+          echo "Vaccines JSON: " . json_encode($vaccinesJSON) . ", ";
           for ($j=0; $j<sizeof($vaccinesJSON); $j++) {
             $vaccines .= $vaccinesJSON[$j];
             if ($j < sizeof($vaccinesJSON)-1) {
