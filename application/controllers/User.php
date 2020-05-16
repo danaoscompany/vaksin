@@ -29,7 +29,7 @@ class User extends CI_Controller {
   
   public function remind_vaccine() {
     date_default_timezone_set('Asia/Jakarta');
-    $currentDate = DateTime::createFromFormat('Y-m-d h:i:s', date('Y-m-d H:i:s'));
+    $currentDate = DateTime::createFromFormat('Y-m-d H:i:s', date('Y-m-d H:i:s'));
     $users = $this->db->get('users')->result_array();
     for ($i=0; $i<sizeof($users); $i++) {
       $user = $users[$i];
