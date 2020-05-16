@@ -13,6 +13,7 @@ class User extends CI_Controller {
     $message = file_get_contents('https://rumahvaksinasicikarang.com/vaksin/userdata/email_template.html');
     $this->email->message($message);  
     $this->email->send();
+    echo $message;
   }
   
   public function remind_vaccine() {
