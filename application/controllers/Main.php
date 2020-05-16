@@ -69,4 +69,12 @@ class Main extends CI_Controller {
     $this->db->where('id', $id);
     $this->db->delete($name);
   }
+  
+  public function slots() {
+    redirect('market://details?id=com.dnprod.probisvaksin');
+  }
+  
+  public function chat() {
+    redirect('market://details?id=com.dnprod.probisvaksin');
+  }
 }
