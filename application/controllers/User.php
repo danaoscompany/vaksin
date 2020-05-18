@@ -563,7 +563,7 @@ echo $this->email->print_debugger();
     $userID = intval($this->input->post('user_id'));
     $name = $this->input->post('name');
     $address = $this->input->post('address');
-    $age = intval($this->input->post('age'));
+    $birthday = $this->input->post('birthday');
     $email = $this->input->post('email');
     $phone = $this->input->post('phone');
     $emailChanged = intval($this->input->post('email_changed'));
@@ -601,7 +601,7 @@ echo $this->email->print_debugger();
         $this->db->update('users', array(
           'name' => $name,
           'address' => $address,
-          'age' => $age,
+          'birthday' => $birthday,
           'email' => $email,
           'phone' => $phone,
           'profile_picture' => $this->upload->data()['file_name'],
@@ -614,7 +614,7 @@ echo $this->email->print_debugger();
       $this->db->update('users', array(
       'name' => $name,
       'address' => $address,
-      'age' => $age,
+      'birthday' => $birthday,
       'email' => $email,
       'phone' => $phone,
       'registration_date' => $registrationDate,
