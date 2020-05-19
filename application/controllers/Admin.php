@@ -5,7 +5,7 @@ require('Message.php');
 class Admin extends CI_Controller {
   
   public function get_active_slots() {
-    $activeSlots = $this->db->get_where('slots', array(
+    $activeSlots = $this->db->get_where('used_vaccines', array(
       'active' => 1
     ))->result_array();
     for ($i=0; $i<sizeof($activeSlots); $i++) {
