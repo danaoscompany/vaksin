@@ -7,7 +7,7 @@ class User extends CI_Controller {
   public function email_test() {
     $email = 'danaoscompany@gmail.com';
     $this->load_email_config();
-    $this->email->from('admin@adityap.my.id', 'Vaksin Cikarang');
+    $this->email->from('admin@rumahvaksincikarang.com', 'Vaksin Cikarang');
     $this->email->to($email); 
     $this->email->subject('Tes Email');
     $message = file_get_contents('https://rumahvaksincikarang.com/vaksin/userdata/email_template.html');
@@ -444,10 +444,10 @@ class User extends CI_Controller {
   public function load_email_config() {
     $this->load->library('email');
 $config['protocol']    = 'smtp';
-$config['smtp_host']    = 'adityap.my.id';
+$config['smtp_host']    = 'rumahvaksincikarang.com';
 $config['smtp_port']    = '587';
 $config['smtp_timeout'] = '7';
-$config['smtp_user']    = 'admin@adityap.my.id';
+$config['smtp_user']    = 'admin@rumahvaksincikarang.com';
 $config['smtp_pass']    = 'HelloWorld@123';
 $config['charset']    = 'utf-8';
 $config['newline']    = "\r\n";
