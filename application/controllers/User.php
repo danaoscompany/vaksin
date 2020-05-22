@@ -174,6 +174,9 @@ class User extends CI_Controller {
   public function get_messages() {
     $start = intval($this->input->post('start'));
     $length = intval($this->input->post('length'));
+	$userID = intval($this->input->post('user_id'));
+	$adminID = intval($this->input->post('admin_id'));
+	$this->db->where('user_id', $userID)->where('admin_id', $adminID);
     $this->db->limit($length, $start);
     $this->db->order_by('date', 'DESC');
     $messages = $this->db->get('messages')->result_array();
