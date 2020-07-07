@@ -738,6 +738,10 @@ echo $this->email->print_debugger();
         'password' => $password
       ));
       $lastID = intval($this->db->insert_id());
+      $this->db->insert('members', array(
+      	'user_id' => $lastID,
+      	'is_leader' => 1
+      ));
       $user = $this->db->get_where('users', array(
         'id' => $lastID
       ))->row_array();
