@@ -753,6 +753,28 @@ echo $this->email->print_debugger();
     }
   }
   
+  public function add_member() {
+  	$userID = intval($this->input->post('user_id'));
+  	$name = $this->input->post('name');
+  	$birthday = $this->input->post('birthday');
+  	$config = array(
+        'upload_path' => './userdata',
+        'allowed_types' => "gif|jpg|png|jpeg",
+        'overwrite' => TRUE,
+        'max_size' => "2048000"
+        );
+        $this->load->library('upload', $config);
+        if($this->upload->do_upload('file')) {
+        	$this->db->insert('members', array(
+        		'user_id' => $userID,
+        		'name' => $name,
+        		'birthday' => $birthday,
+        		'profile_picture' => $this->upload->data('file_name')
+        	));
+        ));
+    }
+  }
+  
   private function randomNumber($length) {
     $result = '';
 
