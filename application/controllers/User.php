@@ -762,16 +762,15 @@ echo $this->email->print_debugger();
         'allowed_types' => "gif|jpg|png|jpeg",
         'overwrite' => TRUE,
         'max_size' => "2048000"
-        );
-        $this->load->library('upload', $config);
-        if ($this->upload->do_upload('file')) {
-        	$this->db->insert('members', array(
-        		'user_id' => $userID,
-        		'name' => $name,
-        		'birthday' => $birthday,
-        		'profile_picture' => $this->upload->data('file_name')
-        	));
-        }
+    );
+    $this->load->library('upload', $config);
+    if ($this->upload->do_upload('file')) {
+        $this->db->insert('members', array(
+        	'user_id' => $userID,
+        	'name' => $name,
+        	'birthday' => $birthday,
+        	'profile_picture' => $this->upload->data('file_name')
+        ));
     }
   }
   
