@@ -774,6 +774,39 @@ echo $this->email->print_debugger();
     }
   }
   
+  public function edit_member() {
+  	$id = intval($this->input->post('id'));
+  	$userID = intval($this->input->post('user_id'));
+  	$name = $this->input->post('name');
+  	$birthday = $this->input->post('birthday');
+    $profilePictureChanged = intval($this->input->post('profile_picture_changed'));
+    if ($profilePictureChanged == 1) {
+	  	$config = array(
+	        'upload_path' => './userdata',
+	        'allowed_types' => "gif|jpg|png|jpeg",
+	        'overwrite' => TRUE,
+	        'max_size' => "2048000"
+	    );
+	    $this->load->library('upload', $config);
+	    if ($this->upload->do_upload('file')) {
+	    	$this->db->where('id', $id);
+	        $this->db->update('members', array(
+	        	'user_id' => $userID,
+	        	'name' => $name,
+	        	'birthday' => $birthday,
+	        	'profile_picture' => $this->upload->data('file_name')
+	        ));
+	    }
+	  }
+    } else if ($profilePictureChanged == 0) {
+    	$this->db->where('id', $id);
+	    $this->db->update('members', array(
+	        'user_id' => $userID,
+	        'name' => $name,
+	        'birthday' => $birthday
+	    ));
+    }
+  
   private function randomNumber($length) {
     $result = '';
 
