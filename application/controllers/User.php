@@ -676,6 +676,7 @@ echo $this->email->print_debugger();
   public function use_vaccine() {
     $userID = intval($this->input->post('user_id'));
     $slotID = intval($this->input->post('slot_id'));
+    $members = $this->input->post('members');
     $noAnggota = 1;
     $usedVaccines = $this->db->query("SELECT * FROM `used_vaccines` WHERE `slot_id`=" . $slotID . " ORDER BY `no_anggota` DESC LIMIT 1")->result_array();
     if (sizeof($usedVaccines) > 0) {
@@ -695,6 +696,7 @@ echo $this->email->print_debugger();
       $this->db->where('user_id', $userID)->where('slot_id', $slotID);
       $this->db->update('used_vaccines', array(
         'user_id' => $userID,
+        'members' => $members,
         'slot_id' => $slotID,
         'vaccines' => $vaccines,
         'price' => $price,
@@ -707,6 +709,7 @@ echo $this->email->print_debugger();
       //$this->db->delete('used_vaccines');
       $this->db->insert('used_vaccines', array(
         'user_id' => $userID,
+        'members' => $members,
         'slot_id' => $slotID,
         'no_anggota' => $noAnggota,
         'vaccines' => $vaccines,
