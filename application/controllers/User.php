@@ -797,7 +797,6 @@ echo $this->email->print_debugger();
 	        	'profile_picture' => $this->upload->data('file_name')
 	        ));
 	    }
-	  }
     } else if ($profilePictureChanged == 0) {
     	$this->db->where('id', $id);
 	    $this->db->update('members', array(
