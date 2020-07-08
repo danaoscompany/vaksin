@@ -804,7 +804,6 @@ echo $this->email->print_debugger();
 	        'name' => $name,
 	        'birthday' => $birthday
 	    ));
-	    echo "ID: " . $id . ", name: " . $name . ", error: " . json_encode($this->db->error());
     }
   }
   
