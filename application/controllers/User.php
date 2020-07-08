@@ -805,6 +805,7 @@ echo $this->email->print_debugger();
 	        'birthday' => $birthday
 	    ));
     }
+  }
   
   private function randomNumber($length) {
     $result = '';
