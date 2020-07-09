@@ -5,9 +5,8 @@ require('Message.php');
 class Admin extends CI_Controller {
   
   public function get_active_slots() {
-    $activeSlots = $this->db->get_where('used_vaccines', array(
-      'active' => 1
-    ))->result_array();
+  	$date = $this->input->post('date');
+    $activeSlots = $this->db->query("SELECT * FROM `used_vaccines` WHERE '" . $date . "' >= `start_date` AND '" . $date . "' < `end_date`");
     for ($i=0; $i<sizeof($activeSlots); $i++) {
       $activeSlots[$i]['name'] = $this->db->get_where('users', array(
         'id' => intval($activeSlots[$i]['user_id'])
