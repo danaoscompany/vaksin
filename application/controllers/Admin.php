@@ -9,7 +9,6 @@ class Admin extends CI_Controller {
     $slots = $this->db->query("SELECT * FROM `used_vaccines`")->result_array();
     $activeSlots = [];
     for ($i=0; $i<sizeof($slots); $i++) {
-      $usedVaccineID = intval($slots['id']);
       $this->db->where('id', $slots[$i]['slot_id']);
       $slot = $this->db->get('slots')->row_array();
       if ($slot['start_date'] >= $date && $date < $slot['end_date']) {
