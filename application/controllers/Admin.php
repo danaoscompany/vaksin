@@ -6,11 +6,18 @@ class Admin extends CI_Controller {
   
   public function get_active_slots() {
   	$date = $this->input->post('date');
-    $activeSlots = $this->db->query("SELECT * FROM `used_vaccines` WHERE '" . $date . "' >= `start_date` AND '" . $date . "' < `end_date`");
-    for ($i=0; $i<sizeof($activeSlots); $i++) {
-      $activeSlots[$i]['name'] = $this->db->get_where('users', array(
-        'id' => intval($activeSlots[$i]['user_id'])
-      ))->row_array()['name'];
+    $slots = $this->db->query("SELECT * FROM `used_vaccines`");
+    $activeSlots = [];
+    for ($i=0; $i<sizeof($slots); $i++) {
+      $this->db->where('id', $slots[$i]['id']);
+      $slot = $this->db->get('slots')->row_array();
+      if ($slot['start_date'] >= $date && $date < $slot['end_date']) {
+        $user = $this->db->get_where('users', array('id' => intval($slot['user_id'])))->row_array();
+      	$activeSlot = array(
+      	  'name' => $user['name']
+      	);
+      	array_push($activeSlots, $activeSlot);
+      }
     }
     echo json_encode($activeSlots);
   }
