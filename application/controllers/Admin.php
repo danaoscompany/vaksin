@@ -6,7 +6,7 @@ class Admin extends CI_Controller {
   
   public function get_active_slots() {
   	$date = $this->input->post('date');
-    $slots = $this->db->query("SELECT * FROM `used_vaccines`")->result_array();
+    $slots = $this->db->query("SELECT * FROM `used_vaccines` WHERE `done`=0")->result_array();
     $activeSlots = [];
     for ($i=0; $i<sizeof($slots); $i++) {
       $this->db->where('id', $slots[$i]['slot_id']);
