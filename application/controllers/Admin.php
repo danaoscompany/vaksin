@@ -9,6 +9,7 @@ class Admin extends CI_Controller {
     $slots = $this->db->query("SELECT * FROM `used_vaccines`")->result_array();
     $activeSlots = [];
     for ($i=0; $i<sizeof($slots); $i++) {
+      echo "Slot ID: " . $slots[$i]['id'] . "\n";
       $this->db->where('id', $slots[$i]['id']);
       $slot = $this->db->get('slots')->row_array();
       echo "Slot: " . json_encode($slot) . "\n";
