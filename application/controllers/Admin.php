@@ -11,6 +11,7 @@ class Admin extends CI_Controller {
     for ($i=0; $i<sizeof($slots); $i++) {
       $this->db->where('id', $slots[$i]['id']);
       $slot = $this->db->get('slots')->row_array();
+      echo "Slot: " . json_encode($slot) . "\n";
       if ($slot['start_date'] >= $date && $date < $slot['end_date']) {
         $user = $this->db->get_where('users', array('id' => intval($slot['user_id'])))->row_array();
       	$activeSlot = array(
