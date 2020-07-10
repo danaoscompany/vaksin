@@ -498,6 +498,7 @@ class User extends CI_Controller {
     $userID = intval($this->input->post('user_id'));
     $date = $this->input->post('date');
     $results = $this->db->query("SELECT * FROM `used_vaccines` WHERE `user_id`=" . $userID)->result_array();
+    $items = [];
     for ($i=0; $i<sizeof($results); $i++) {
       $row = $results[$i];
       $slot = $this->db->get_where('slots', array(
@@ -509,6 +510,7 @@ class User extends CI_Controller {
         $results[$i]['slots'] = $slot['slots'];
         $results[$i]['slots_used'] = $slot['slots_used'];
         $results[$i]['admin_id'] = intval($slot['admin_id']);
+        array_push($items, $results[$i]);
         /*$vaccineNameID = intval($this->db->get_where('vaccines', array(
           'id' => intval($slot['vaccine_id'])
           ))->row_array()['vaccine_name_id']);
@@ -523,7 +525,7 @@ class User extends CI_Controller {
         ))->row_array()['name'];*/
       }
     }
-    echo json_encode($results);
+    echo json_encode($items);
   }
   
   public function load_email_config() {
