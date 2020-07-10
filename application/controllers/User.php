@@ -497,29 +497,31 @@ class User extends CI_Controller {
   public function get_active_vaccines() {
     $userID = intval($this->input->post('user_id'));
     $date = $this->input->post('date');
-    $results = $this->db->query("SELECT * FROM `used_vaccines` WHERE `user_id`=" . $userID . " AND '" . $date . "'>=`start_date` AND '" . $date . "'<`end_date`")->result_array();
+    $results = $this->db->query("SELECT * FROM `used_vaccines` WHERE `user_id`=" . $userID)->result_array();
     for ($i=0; $i<sizeof($results); $i++) {
       $row = $results[$i];
       $slot = $this->db->get_where('slots', array(
         'id' => intval($row['slot_id'])
       ))->row_array();
-      $results[$i]['start_date'] = $slot['start_date'];
-      $results[$i]['end_date'] = $slot['end_date'];
-      $results[$i]['slots'] = $slot['slots'];
-      $results[$i]['slots_used'] = $slot['slots_used'];
-      $results[$i]['admin_id'] = intval($slot['admin_id']);
-      /*$vaccineNameID = intval($this->db->get_where('vaccines', array(
-        'id' => intval($slot['vaccine_id'])
-        ))->row_array()['vaccine_name_id']);
-      $results[$i]['vaccine_name'] = $this->db->get_where('vaccine_names', array(
-        'id' => $vaccineNameID
-      ))->row_array()['name'];
-      $vaccineTypeID = intval($this->db->get_where('vaccines', array(
-        'id' => intval($slot['vaccine_id'])
-        ))->row_array()['vaccine_type_id']);
-      $results[$i]['vaccine_type'] = $this->db->get_where('vaccine_types', array(
-        'id' => $vaccineNameID
-      ))->row_array()['name'];*/
+      if ($date >= $slot['start_date'] && $date < $slot['end_date']) {
+        $results[$i]['start_date'] = $slot['start_date'];
+        $results[$i]['end_date'] = $slot['end_date'];
+        $results[$i]['slots'] = $slot['slots'];
+        $results[$i]['slots_used'] = $slot['slots_used'];
+        $results[$i]['admin_id'] = intval($slot['admin_id']);
+        /*$vaccineNameID = intval($this->db->get_where('vaccines', array(
+          'id' => intval($slot['vaccine_id'])
+          ))->row_array()['vaccine_name_id']);
+        $results[$i]['vaccine_name'] = $this->db->get_where('vaccine_names', array(
+          'id' => $vaccineNameID
+        ))->row_array()['name'];
+        $vaccineTypeID = intval($this->db->get_where('vaccines', array(
+          'id' => intval($slot['vaccine_id'])
+          ))->row_array()['vaccine_type_id']);
+        $results[$i]['vaccine_type'] = $this->db->get_where('vaccine_types', array(
+          'id' => $vaccineNameID
+        ))->row_array()['name'];*/
+      }
     }
     echo json_encode($results);
   }
