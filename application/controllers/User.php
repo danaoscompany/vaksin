@@ -504,7 +504,7 @@ class User extends CI_Controller {
       $slot = $this->db->get_where('slots', array(
         'id' => intval($row['slot_id'])
       ))->row_array();
-      //if ($date >= $slot['start_date'] && $date < $slot['end_date']) {
+      if ($date >= $slot['start_date'] && $date < $slot['end_date']) {
         $results[$i]['start_date'] = $slot['start_date'];
         $results[$i]['end_date'] = $slot['end_date'];
         $results[$i]['slots'] = $slot['slots'];
@@ -523,7 +523,7 @@ class User extends CI_Controller {
         $results[$i]['vaccine_type'] = $this->db->get_where('vaccine_types', array(
           'id' => $vaccineNameID
         ))->row_array()['name'];*/
-      //}
+      }
     }
     echo json_encode($items);
   }
