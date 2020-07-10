@@ -21,16 +21,17 @@ class Admin extends CI_Controller {
     echo json_encode($activeSlots);
   }
   
-  public function send_status() {
+  public function get_status() {
+    $adminID = intval($this->input->post('admin_id'));
     $userID = intval($this->input->post('user_id'));
-    $statuses = $this->input->post('status');
-    $token = $this->db->query("SELECT * FROM `users` WHERE `id`=" . $userID)->row_array()['fcm_token'];
+    $token = $this->db->query("SELECT * FROM `admins` WHERE `id`=" . $adminID)->row_array()['fcm_token'];
     $url = "https://fcm.googleapis.com/fcm/send";
     $serverKey = 'AAAAIwQS5GU:APA91bEKw_FfDy4doPGHEDu9pQKRjq8zX6Fh9SVLQFCULbC97RNfmMh3bv83s5i4FYTEw9Aj9-qDRl7vKlBHUe_mDT8n4FFxkLmXielxDoNHkcIs2UpiVpwBdoZI6Uc_gRqQDnOn_55z';
-    $title = "Pembaharuan status pasien";
+    $title = "Mengambil status";
     $body = "";
     $data = array(
-      'status' => $statuses
+      'type' => 'get_status',
+      'user_id' => $userID
     );
     $notification = array('title' =>$title , 'body' => $body, 'sound' => 'default', 'badge' => '1');
     $arrayToSend = array('to' => $token, 'notification' => $notification, 'priority' => 'high', 'data' => $data);
@@ -50,6 +51,146 @@ class Admin extends CI_Controller {
     die('FCM Send Error: ' . curl_error($ch));
     }
     curl_close($ch);
+  }
+  
+  public function send_status() {
+    $userID = intval($this->input->post('user_id'));
+    $statuses = $this->input->post('statuses');
+    $token = $this->db->query("SELECT * FROM `users` WHERE `id`=" . $userID)->row_array()['fcm_token'];
+    $url = "https://fcm.googleapis.com/fcm/send";
+    $serverKey = 'AAAAIwQS5GU:APA91bEKw_FfDy4doPGHEDu9pQKRjq8zX6Fh9SVLQFCULbC97RNfmMh3bv83s5i4FYTEw9Aj9-qDRl7vKlBHUe_mDT8n4FFxkLmXielxDoNHkcIs2UpiVpwBdoZI6Uc_gRqQDnOn_55z';
+    $title = "Pembaharuan status pasien";
+    $body = "";
+    $data = array(
+      'status' => $statuses,
+      'type' => 'send_status'
+    );
+    $notification = array('title' =>$title , 'body' => $body, 'sound' => 'default', 'badge' => '1');
+    $arrayToSend = array('to' => $token, 'notification' => $notification, 'priority' => 'high', 'data' => $data);
+    $json = json_encode($arrayToSend);
+    $headers = array();
+    $headers[] = 'Content-Type: application/json';
+    $headers[] = 'Authorization: key='. $serverKey;
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST,"POST");
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
+    curl_setopt($ch, CURLOPT_HTTPHEADER,$headers);
+    //Send the request
+    $response = curl_exec($ch);
+    //Close request
+    if ($response === FALSE) {
+    die('FCM Send Error: ' . curl_error($ch));
+    }
+    curl_close($ch);
+  }
+  
+  public function add_status() {
+    $status = $this->input->post('status');
+    $users = $this->db->get('users')->result_array();
+    for ($i=0; $i<sizeof($users); $i++) {
+    $user = $users[$i];
+    $userID = intval($user['id']);
+    $token = $this->db->query("SELECT * FROM `users` WHERE `id`=" . $userID)->row_array()['fcm_token'];
+    $url = "https://fcm.googleapis.com/fcm/send";
+    $serverKey = 'AAAAIwQS5GU:APA91bEKw_FfDy4doPGHEDu9pQKRjq8zX6Fh9SVLQFCULbC97RNfmMh3bv83s5i4FYTEw9Aj9-qDRl7vKlBHUe_mDT8n4FFxkLmXielxDoNHkcIs2UpiVpwBdoZI6Uc_gRqQDnOn_55z';
+    $title = "Pembaharuan status pasien";
+    $body = "";
+    $data = array(
+      'status' => $status,
+      'type' => 'add_status'
+    );
+    $notification = array('title' =>$title , 'body' => $body, 'sound' => 'default', 'badge' => '1');
+    $arrayToSend = array('to' => $token, 'notification' => $notification, 'priority' => 'high', 'data' => $data);
+    $json = json_encode($arrayToSend);
+    $headers = array();
+    $headers[] = 'Content-Type: application/json';
+    $headers[] = 'Authorization: key='. $serverKey;
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST,"POST");
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
+    curl_setopt($ch, CURLOPT_HTTPHEADER,$headers);
+    //Send the request
+    $response = curl_exec($ch);
+    //Close request
+    if ($response === FALSE) {
+    die('FCM Send Error: ' . curl_error($ch));
+    }
+    curl_close($ch);
+    }
+  }
+  
+  public function edit_status() {
+    $status = $this->input->post('status');
+    $users = $this->db->get('users')->result_array();
+    for ($i=0; $i<sizeof($users); $i++) {
+    $user = $users[$i];
+    $userID = intval($user['id']);
+    $token = $this->db->query("SELECT * FROM `users` WHERE `id`=" . $userID)->row_array()['fcm_token'];
+    $url = "https://fcm.googleapis.com/fcm/send";
+    $serverKey = 'AAAAIwQS5GU:APA91bEKw_FfDy4doPGHEDu9pQKRjq8zX6Fh9SVLQFCULbC97RNfmMh3bv83s5i4FYTEw9Aj9-qDRl7vKlBHUe_mDT8n4FFxkLmXielxDoNHkcIs2UpiVpwBdoZI6Uc_gRqQDnOn_55z';
+    $title = "Pembaharuan status pasien";
+    $body = "";
+    $data = array(
+      'status' => $status,
+      'type' => 'edit_status'
+    );
+    $notification = array('title' =>$title , 'body' => $body, 'sound' => 'default', 'badge' => '1');
+    $arrayToSend = array('to' => $token, 'notification' => $notification, 'priority' => 'high', 'data' => $data);
+    $json = json_encode($arrayToSend);
+    $headers = array();
+    $headers[] = 'Content-Type: application/json';
+    $headers[] = 'Authorization: key='. $serverKey;
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST,"POST");
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
+    curl_setopt($ch, CURLOPT_HTTPHEADER,$headers);
+    //Send the request
+    $response = curl_exec($ch);
+    //Close request
+    if ($response === FALSE) {
+    die('FCM Send Error: ' . curl_error($ch));
+    }
+    curl_close($ch);
+    }
+  }
+  
+  public function delete_status() {
+    $uuid = $this->input->post('uuid');
+    $users = $this->db->get('users')->result_array();
+    for ($i=0; $i<sizeof($users); $i++) {
+    $user = $users[$i];
+    $userID = intval($user['id']);
+    $token = $this->db->query("SELECT * FROM `users` WHERE `id`=" . $userID)->row_array()['fcm_token'];
+    $url = "https://fcm.googleapis.com/fcm/send";
+    $serverKey = 'AAAAIwQS5GU:APA91bEKw_FfDy4doPGHEDu9pQKRjq8zX6Fh9SVLQFCULbC97RNfmMh3bv83s5i4FYTEw9Aj9-qDRl7vKlBHUe_mDT8n4FFxkLmXielxDoNHkcIs2UpiVpwBdoZI6Uc_gRqQDnOn_55z';
+    $title = "Pembaharuan status pasien";
+    $body = "";
+    $data = array(
+      'uuid' => $uuid,
+      'type' => 'delete_status'
+    );
+    $notification = array('title' =>$title , 'body' => $body, 'sound' => 'default', 'badge' => '1');
+    $arrayToSend = array('to' => $token, 'notification' => $notification, 'priority' => 'high', 'data' => $data);
+    $json = json_encode($arrayToSend);
+    $headers = array();
+    $headers[] = 'Content-Type: application/json';
+    $headers[] = 'Authorization: key='. $serverKey;
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST,"POST");
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
+    curl_setopt($ch, CURLOPT_HTTPHEADER,$headers);
+    //Send the request
+    $response = curl_exec($ch);
+    //Close request
+    if ($response === FALSE) {
+    die('FCM Send Error: ' . curl_error($ch));
+    }
+    curl_close($ch);
+    }
   }
   
   public function accept_user_chat() {
