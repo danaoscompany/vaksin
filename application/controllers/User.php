@@ -462,9 +462,42 @@ class User extends CI_Controller {
     echo json_encode($results);
   }
   
+  public function get_status() {
+    $adminID = intval($this->input->post('admin_id'));
+    $userID = intval($this->input->post('user_id'));
+    $token = $this->db->query("SELECT * FROM `admins` WHERE `id`=" . $adminID)->row_array()['fcm_token'];
+    $url = "https://fcm.googleapis.com/fcm/send";
+    $serverKey = 'AAAAIwQS5GU:APA91bEKw_FfDy4doPGHEDu9pQKRjq8zX6Fh9SVLQFCULbC97RNfmMh3bv83s5i4FYTEw9Aj9-qDRl7vKlBHUe_mDT8n4FFxkLmXielxDoNHkcIs2UpiVpwBdoZI6Uc_gRqQDnOn_55z';
+    $title = "Mengambil status";
+    $body = "";
+    $data = array(
+      'type' => 'get_status',
+      'user_id' => $userID
+    );
+    $notification = array('title' =>$title , 'body' => $body, 'sound' => 'default', 'badge' => '1');
+    $arrayToSend = array('to' => $token, 'notification' => $notification, 'priority' => 'high', 'data' => $data);
+    $json = json_encode($arrayToSend);
+    $headers = array();
+    $headers[] = 'Content-Type: application/json';
+    $headers[] = 'Authorization: key='. $serverKey;
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST,"POST");
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
+    curl_setopt($ch, CURLOPT_HTTPHEADER,$headers);
+    //Send the request
+    $response = curl_exec($ch);
+    //Close request
+    if ($response === FALSE) {
+    die('FCM Send Error: ' . curl_error($ch));
+    }
+    curl_close($ch);
+  }
+  
   public function get_active_vaccines() {
     $userID = intval($this->input->post('user_id'));
-    $results = $this->db->query("SELECT * FROM `used_vaccines` WHERE `user_id`=" . $userID . " AND `active`=1")->result_array();
+    $date = $this->input->post('date');
+    $results = $this->db->query("SELECT * FROM `used_vaccines` WHERE `user_id`=" . $userID . " AND '" . $date . "'>=`start_date` AND '" . $date . "'<`end_date`")->result_array();
     for ($i=0; $i<sizeof($results); $i++) {
       $row = $results[$i];
       $slot = $this->db->get_where('slots', array(
@@ -474,6 +507,7 @@ class User extends CI_Controller {
       $results[$i]['end_date'] = $slot['end_date'];
       $results[$i]['slots'] = $slot['slots'];
       $results[$i]['slots_used'] = $slot['slots_used'];
+      $results[$i]['admin_id'] = intval($slot['admin_id']);
       /*$vaccineNameID = intval($this->db->get_where('vaccines', array(
         'id' => intval($slot['vaccine_id'])
         ))->row_array()['vaccine_name_id']);
