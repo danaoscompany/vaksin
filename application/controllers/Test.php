@@ -21,7 +21,7 @@ try {
     $mail->Username   = '_mainaccount@rumahvaksincikarang.com';                     // SMTP username
     $mail->Password   = 'V4ks1n2020';                               // SMTP password
     $mail->SMTPSecure = 'tls';         // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` encouraged
-    $mail->Port       = 587;                                    // TCP port to connect to, use 465 for `PHPMailer::ENCRYPTION_SMTPS` above
+    $mail->Port       = 465;                                    // TCP port to connect to, use 465 for `PHPMailer::ENCRYPTION_SMTPS` above
 
     //Recipients
     $mail->setFrom('_mainaccount@rumahvaksincikarang.com', 'Mailer');
