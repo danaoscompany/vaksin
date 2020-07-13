@@ -715,6 +715,8 @@ echo $this->email->print_debugger();
     $userID = intval($this->input->post('user_id'));
     $slotID = intval($this->input->post('slot_id'));
     $members = $this->input->post('members');
+    $insuranceID = intval($this->input->post('insurance_id'));
+    $insuranceName = $this->input->post('insurance_name');
     $noAnggota = 1;
     $usedVaccines = $this->db->query("SELECT * FROM `used_vaccines` WHERE `slot_id`=" . $slotID . " ORDER BY `no_anggota` DESC LIMIT 1")->result_array();
     if (sizeof($usedVaccines) > 0) {
@@ -739,7 +741,9 @@ echo $this->email->print_debugger();
         'vaccines' => $vaccines,
         'price' => $price,
         'payment_method' => $paymentMethod,
-        'paid' => $paid
+        'paid' => $paid,
+        'insurance_id' => $insuranceID,
+        'insurance_name' => $insuranceName
       ));
       echo 1;
     } else {
@@ -753,7 +757,9 @@ echo $this->email->print_debugger();
         'vaccines' => $vaccines,
         'price' => $price,
         'payment_method' => $paymentMethod,
-        'paid' => $paid
+        'paid' => $paid,
+        'insurance_id' => $insuranceID,
+        'insurance_name' => $insuranceName
       ));
       $this->db->where('id', $slotID);
       $this->db->set('slots_used', 'slots_used+1', FALSE);
