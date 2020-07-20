@@ -11,7 +11,6 @@ class Admin extends CI_Controller {
     for ($i=0; $i<sizeof($slots); $i++) {
       $this->db->where('id', $slots[$i]['slot_id']);
       $memberIDs = $slots[$i]['members'];
-      echo "ID: " . $slots[$i]['id'] . ", members: " . $memberIDs . "\n";
       if ($memberIDs == NULL || $memberIDs == "") {
       	$memberIDs = array();
       } else {
