@@ -4,6 +4,33 @@ require('Message.php');
 
 class Admin extends CI_Controller {
   
+  public function get_used_vaccines() {
+  	$date = $this->input->post('date');
+    $slots = $this->db->query("SELECT * FROM `used_vaccines`")->result_array();
+    $activeSlots = [];
+    for ($i=0; $i<sizeof($slots); $i++) {
+      $this->db->where('id', $slots[$i]['slot_id']);
+      $membersIDs = $slots[$i]['members'];
+      if ($membersIDs == NULL || $membersIDs == "") {
+      	$membersIDs = array();
+      } else {
+      	$membersIDs = json_decode($membersIDs, true);
+      }
+      $members = [];
+      for ($j=0; $j<sizeof($memberIDs); $j++) {
+      	$member = $this->db->query("SELECT * FROM `members` WHERE `id`=" . $membersIDs[$j])->row_array();
+      	array_push($members, $member);
+      }
+      $slot = $this->db->get('slots')->row_array();
+      $user = $this->db->get_where('users', array('id' => intval($slots[$i]['user_id'])))->row_array();
+      $activeSlot = $slots[$i];
+      $activeSlot['name'] = $user['name'];
+      $activeSlot['members'] = $members;
+      array_push($activeSlots, $activeSlot);
+    }
+    echo json_encode($activeSlots);
+  }
+  
   public function get_active_slots() {
   	$date = $this->input->post('date');
     $slots = $this->db->query("SELECT * FROM `used_vaccines` WHERE `done`=0")->result_array();
