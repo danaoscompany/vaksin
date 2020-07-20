@@ -10,16 +10,16 @@ class Admin extends CI_Controller {
     $activeSlots = [];
     for ($i=0; $i<sizeof($slots); $i++) {
       $this->db->where('id', $slots[$i]['slot_id']);
-      $membersIDs = $slots[$i]['members'];
-      echo "ID: " . $slots[$i]['id'] . ", members: " . $membersIDs . "\n";
-      if ($membersIDs == NULL || $membersIDs == "") {
-      	$membersIDs = array();
+      $memberIDs = $slots[$i]['members'];
+      echo "ID: " . $slots[$i]['id'] . ", members: " . $memberIDs . "\n";
+      if ($memberIDs == NULL || $memberIDs == "") {
+      	$memberIDs = array();
       } else {
-      	$membersIDs = json_decode($membersIDs, true);
+      	$memberIDs = json_decode($memberIDs, true);
       }
       $members = [];
       for ($j=0; $j<sizeof($memberIDs); $j++) {
-      	$member = $this->db->query("SELECT * FROM `members` WHERE `id`=" . $membersIDs[$j])->row_array();
+      	$member = $this->db->query("SELECT * FROM `members` WHERE `id`=" . $memberIDs[$j])->row_array();
       	array_push($members, $member);
       }
       $slot = $this->db->get('slots')->row_array();
