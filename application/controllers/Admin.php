@@ -24,8 +24,8 @@ class Admin extends CI_Controller {
       $slot = $this->db->get('slots')->row_array();
       $user = $this->db->get_where('users', array('id' => intval($slots[$i]['user_id'])))->row_array();
       $activeSlot = $slots[$i];
-      $activeSlot['name'] = $user['name'];
-      $activeSlot['members'] = $members;
+      $activeSlot['user_name'] = $user['name'];
+      $activeSlot['user_members'] = $members;
       array_push($activeSlots, $activeSlot);
     }
     echo json_encode($activeSlots);
