@@ -768,6 +768,18 @@ echo $this->email->print_debugger();
     }
   }
   
+  public function is_registration_complete() {
+  	$email = $this->input->post('email');
+  	$users = $this->db->get_where('users', array(
+      'email' => $email
+    ))->result_array();
+    if (sizeof($users) > 0) {
+      $user = $users[0];
+      echo $user['registration_complete'];
+    }
+    echo 0;
+  }
+  
   public function signup() {
     $email = $this->input->post('email');
     $password = $this->input->post('password');
