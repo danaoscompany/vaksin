@@ -780,6 +780,12 @@ echo $this->email->print_debugger();
     echo 0;
   }
   
+  public function get_members_by_user_id() {
+    $userID = intval($this->input->post('user_id'));
+    $members = $this->db->query("SELECT * FROM `members` WHERE `user_id`=" . $userID)->result_array();
+    echo json_encode($members);
+  }
+  
   public function signup() {
     $email = $this->input->post('email');
     $password = $this->input->post('password');
