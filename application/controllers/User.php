@@ -270,16 +270,16 @@ class User extends CI_Controller {
           'id' => intval($payment['user_id'])
       ))->row_array();
       $pushyToken = $user['pushy_token'];
-      PushyAPI::send_message("admin", $pushyToken, 2, 1, 'Pembayaran berhasil', "Pembayaran Anda sebesar" . $amount . " telah berhasil", array(
+      PushyAPI::send_message("admin", $pushyToken, 2, 1, 'Pembayaran sedang diverifikasi admin', "Pembayaran Anda sebesar" . $amount . " sudah masuk. Mohon selagi admin kami memeriksa pembayaran Anda.", array(
         'data' => json_encode($obj)
       ));
       $this->db->where('external_id', $externalID);
       $this->db->update('payments', array(
-        'status' => 'PAID'
+        'status' => 'VERIFY'
       ));
-      $this->db->where('id', intval($user['id']));
+      /*$this->db->where('id', intval($user['id']));
       $this->db->set('balance', 'balance+' . $amount, FALSE);
-      $this->db->update('users');
+      $this->db->update('users');*/
     } else if ($status == 'FAILED') {
       $user = $this->db->get_where('users', array(
           'id' => intval($payment['user_id'])

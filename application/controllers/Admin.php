@@ -376,4 +376,49 @@ class Admin extends CI_Controller {
       echo json_encode($this->upload->display_errors());
     }
   }
+  
+  public function get_payment_by_id() {
+  	$id = intval($this->input->post('id'));
+  	$payment = $this->db->get_where('payments', array('id' => $id))->row_array();
+  	$user = $this->db->get_where('users', array('id' => intval($payment['user_id'])))->row_array();
+  	if ($user != null) {
+  	  $payment['name'] = $user['name'];
+  	  $payment['profile_picture'] = $user['profile_picture'];
+  	} else {
+  	  $payment['name'] = '';
+  	  $payment['profile_picture'] = '';
+  	}
+  	echo json_encode($payment);
+  }
+  
+  public function verify_payment() {
+  	$id = intval($this->input->post('id'));
+  	$this->db->query("UPDATE `payments` SET `status`='PAID' WHERE `id`=" . $id);
+  	$payment = $this->db->get_where('payments', array('id' => $id))->row_array();
+  	$amount = intval($payment['amount']);
+  	$userID = intval($payment['user_id']);
+  	$user = $this->db->get_where('users', array('id' => $userID))->row_array();
+  	$pushyToken = $user['pushy_token'];
+  	PushyAPI::send_message("admin", $pushyToken, 2, 1, 'Pembayaran berhasil', "Pembayaran Anda sebesar" . $amount . " telah berhasil", array(
+      'data' => json_encode($obj)
+    ));
+    $balance = intval($user['balance']);
+    $balance += $amount;
+    $this->db->query("UPDATE `users` SET `balance`=" . $balance . " WHERE `id`=" . $userID);
+  }
+  
+  public function get_payments() {
+  	$payments = $this->db->query("SELECT * FROM `payments` ORDER BY `date` DESC")->result_array();
+  	for ($i=0; $i<sizeof($payments); $i++) {
+  	  $user = $this->db->get_where('users', array('id' => intval($payments[$i]['user_id'])))->row_array();
+  	  if ($user != null) {
+  	    $payments[$i]['name'] = $user['name'];
+  	    $payments[$i]['profile_picture'] = $user['profile_picture'];
+  	  } else {
+  	    $payments[$i]['name'] = '';
+  	    $payments[$i]['profile_picture'] = '';
+  	  }
+  	}
+  	echo json_encode($payments);
+  }
 }
