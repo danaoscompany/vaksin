@@ -938,4 +938,26 @@ echo $this->email->print_debugger();
     $cmd = $this->input->post('cmd');
     echo json_encode($this->db->query($cmd)->result_array());
   }
+  
+  public function send_payment_proof() {
+  	$paymentID = intval($this->input->post('payment_id'));
+  	$name = $this->input->post('name');
+  	$bankName = $this->input->post('bank_name');
+  	$accountNumber = $this->input->post('account_number');
+    $config = array(
+      'upload_path' => './userdata',
+      'allowed_types' => "gif|jpg|png|jpeg",
+      'overwrite' => TRUE,
+      'max_size' => "2048000"
+    );
+    $this->load->library('upload', $config);
+    if($this->upload->do_upload('file')) {
+      $this->db->where('id', $paymentID);
+      $this->db->update('payments', array(
+        'name' => $name,
+        'bank_name' => $bankName,
+        'account_number' => $accountNumber
+      ));
+    }
+  }
 }
