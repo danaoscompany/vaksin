@@ -437,4 +437,36 @@ class Admin extends CI_Controller {
   	}
   	echo json_encode($payments);
   }
+  
+  public function end_chat() {
+    $adminID = intval($this->input->post('admin_id'));
+    $userID = intval($this->input->post('user_id'));
+    $date = $this->input->post('date');
+    $message = "Percakapan Anda telah diakhiri. Semoga informasi yang didapat bermanfaat, silahkan klik tombol chat lagi untuk keluhan-keluhan lainnya.";
+    $user = $this->db->get_where('users', array('id' => $userID))->row_array();
+  	$pushyToken = $user['pushy_token'];
+  	$this->db->insert('messages', array(
+      'user_id' => $userID,
+      'admin_id' => $adminID,
+      'sender' => 'admin',
+      'message' => $message,
+      'date' => $date
+    ));
+    $lastID = intval($this->db->insert_id());
+    $user = $this->db->get_where('users', array(
+        'id' => $userID
+      ))->row_array();
+    $messageInfo = $this->db->get_where('messages', array(
+          'id' => $lastID
+        ))->row_array();
+    $messageInfo['admin_name'] = $this->db->get_where('admins', array(
+      'id' => $adminID
+    ))->row_array()['name'];
+    PushyAPI::send_message("user", $user['pushy_token'], 5, 1, 'Percakapan telah diakhiri', $message, array(
+        'data' => json_encode($messageInfo)
+      ));
+  	PushyAPI::send_message("admin", $pushyToken, 6, 1, 'Percakapan telah diakhiri', "Sesi percakapan Anda dengan admin telah berakhir", array(
+      'data' => json_encode($obj)
+    ));
+  }
 }
