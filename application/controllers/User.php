@@ -964,4 +964,9 @@ echo $this->email->print_debugger();
       echo json_encode($this->db->display_errors());
     }
   }
+  
+  public function get_ads_count() {
+    $ads = $this->db->get('ads')->result_array();
+    echo sizeof($ads);
+  }
 }
