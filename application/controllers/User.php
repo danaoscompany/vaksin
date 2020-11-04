@@ -959,6 +959,7 @@ echo $this->email->print_debugger();
         'account_number' => $accountNumber,
         'payment_proof' => $this->upload->data()['file_name']
       ));
+      echo "UPDATE `payments` SET `account_holder`='" . $name . "', `bank_name`='" . $bankName . "', `account_number`='" . $accountNumber . "' WHERE `id`=" . $paymentID;
     } else {
       echo json_encode($this->db->display_errors());
     }
