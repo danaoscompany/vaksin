@@ -954,7 +954,7 @@ echo $this->email->print_debugger();
     if($this->upload->do_upload('file')) {
       $this->db->where('id', $paymentID);
       $this->db->update('payments', array(
-        'name' => $name,
+        'account_holder' => $name,
         'bank_name' => $bankName,
         'account_number' => $accountNumber,
         'payment_proof' => $this->upload->data()['file_name']
