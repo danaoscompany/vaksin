@@ -407,6 +407,22 @@ class Admin extends CI_Controller {
     $this->db->query("UPDATE `users` SET `balance`=" . $balance . " WHERE `id`=" . $userID);
   }
   
+  public function unverify_payment() {
+  	$id = intval($this->input->post('id'));
+  	$this->db->query("UPDATE `payments` SET `status`='UNPAID' WHERE `id`=" . $id);
+  	$payment = $this->db->get_where('payments', array('id' => $id))->row_array();
+  	$amount = intval($payment['amount']);
+  	$userID = intval($payment['user_id']);
+  	$user = $this->db->get_where('users', array('id' => $userID))->row_array();
+  	$pushyToken = $user['pushy_token'];
+  	PushyAPI::send_message("admin", $pushyToken, 2, 1, 'Ada pembayaran belum diselesaikan', "Pembayaran Anda sebesar" . $amount . " belum Anda selesaikan", array(
+      'data' => json_encode($obj)
+    ));
+    $balance = intval($user['balance']);
+    $balance -= $amount;
+    $this->db->query("UPDATE `users` SET `balance`=" . $balance . " WHERE `id`=" . $userID);
+  }
+  
   public function get_payments() {
   	$payments = $this->db->query("SELECT * FROM `payments` ORDER BY `date` DESC")->result_array();
   	for ($i=0; $i<sizeof($payments); $i++) {
