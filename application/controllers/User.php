@@ -497,7 +497,7 @@ class User extends CI_Controller {
   public function get_active_vaccines() {
     $userID = intval($this->input->post('user_id'));
     $date = $this->input->post('date');
-    $results = $this->db->query("SELECT * FROM `used_vaccines` WHERE `user_id`=" . $userID)->result_array();
+    $results = $this->db->query("SELECT * FROM `used_vaccines` WHERE `user_id`=" . $userID . " AND `done`!=1")->result_array();
     $items = [];
     for ($i=0; $i<sizeof($results); $i++) {
       $row = $results[$i];
@@ -822,20 +822,29 @@ echo $this->email->print_debugger();
   	$userID = intval($this->input->post('user_id'));
   	$name = $this->input->post('name');
   	$birthday = $this->input->post('birthday');
-  	$config = array(
-        'upload_path' => './userdata',
-        'allowed_types' => "gif|jpg|png|jpeg",
-        'overwrite' => TRUE,
-        'max_size' => "2048000"
-    );
-    $this->load->library('upload', $config);
-    if ($this->upload->do_upload('file')) {
-        $this->db->insert('members', array(
-        	'user_id' => $userID,
-        	'name' => $name,
-        	'birthday' => $birthday,
-        	'profile_picture' => $this->upload->data('file_name')
-        ));
+  	$profilePictureAdded = intval($this->input->post('profile_picture_added'));
+  	if ($profilePictureAdded == 1) {
+	  	$config = array(
+    	    'upload_path' => './userdata',
+    	    'allowed_types' => "gif|jpg|png|jpeg",
+    	    'overwrite' => TRUE,
+    	    'max_size' => "2048000"
+    	);
+    	$this->load->library('upload', $config);
+    	if ($this->upload->do_upload('file')) {
+    	    $this->db->insert('members', array(
+    	    	'user_id' => $userID,
+    	    	'name' => $name,
+    	    	'birthday' => $birthday,
+    	    	'profile_picture' => $this->upload->data('file_name')
+    	    ));
+    	}
+    } else {
+    	$this->db->insert('members', array(
+    	    'user_id' => $userID,
+    	    'name' => $name,
+    	    'birthday' => $birthday
+    	));
     }
   }
   
