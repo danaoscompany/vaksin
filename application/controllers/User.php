@@ -718,7 +718,11 @@ echo $this->email->print_debugger();
     $insuranceID = intval($this->input->post('insurance_id'));
     $insuranceName = $this->input->post('insurance_name');
     $noAnggota = 1;
-    $usedVaccines = $this->db->query("SELECT * FROM `used_vaccines` WHERE `slot_id`=" . $slotID . " ORDER BY `no_anggota` DESC LIMIT 1")->result_array();
+    $slot = $this->db->query("SELECT * FROM `slots` WHERE `id`=" . $slotID)->row_array();
+    $date = $slot['start_date'];
+    $date = substr($date, 0, strpos($date, ' '));
+    $latestSlotID = intval($this->db->query("SELECT `id` FROM `slots` WHERE DATE(`start_date`)='" . $date . "' ORDER BY `start_date` DESC LIMIT 1")->row_array()['id']);
+    $usedVaccines = $this->db->query("SELECT * FROM `used_vaccines` WHERE `slot_id`=" . $latestSlotID . " ORDER BY `no_anggota` DESC LIMIT 1")->result_array();
     if (sizeof($usedVaccines) > 0) {
       $noAnggota = $usedVaccines[0]['no_anggota'];
       $noAnggota = intval($noAnggota)+1;
@@ -738,6 +742,7 @@ echo $this->email->print_debugger();
         'user_id' => $userID,
         'members' => $members,
         'slot_id' => $slotID,
+        'no_anggota' => $noAnggota,
         'vaccines' => $vaccines,
         'price' => $price,
         'payment_method' => $paymentMethod,

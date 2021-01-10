@@ -46,4 +46,20 @@ try {
 			unlink("userdata/testgambar.jpg");
 		}
 	}
+	
+	public function a() {
+		$slot = $this->db->query("SELECT * FROM `slots` WHERE `id`=109")->row_array();
+		$date = '2021-01-10 10:00:00';
+	    $date = substr($date, 0, strpos($date, ' '));
+	    $latestSlotID = intval($this->db->query("SELECT `id` FROM `slots` WHERE DATE(`start_date`)='" . $date . "' ORDER BY `start_date` DESC LIMIT 1")->row_array()['id']);
+	    $usedVaccines = $this->db->query("SELECT * FROM `used_vaccines` WHERE `slot_id`=" . $latestSlotID . " ORDER BY `no_anggota` DESC LIMIT 1")->result_array();
+	    $noAnggota = 0;
+    	if (sizeof($usedVaccines) > 0) {
+      		$noAnggota = $usedVaccines[0]['no_anggota'];
+      		$noAnggota = intval($noAnggota)+1;
+    	}
+	    $noAnggota = str_pad($noAnggota, 4, '0', STR_PAD_LEFT);
+    	//echo $noAnggota;
+    	echo sizeof($usedVaccines);
+	}
 }
