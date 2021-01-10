@@ -40,4 +40,10 @@ try {
     echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
 }
 	}
+	
+	public function delete_image() {
+		if (file_exists("userdata/testgambar.jpg")) {
+			unlink("userdata/testgambar.jpg");
+		}
+	}
 }

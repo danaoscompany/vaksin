@@ -354,26 +354,83 @@ class Admin extends CI_Controller {
     }
   }
   
+  public function get_article_by_id() {
+  	$id = intval($this->input->post('id'));
+  	$article = $this->db->query("SELECT * FROM `articles` WHERE `id`=" . $id)->row_array();
+  	$article['images'] = $this->db->query("SELECT * FROM `article_images` WHERE `article_id`=" . $id)->result_array();
+  	echo json_encode($article);
+  }
+  
+  public function get_articles() {
+  	$articles = $this->db->query("SELECT * FROM `articles`")->result_array();
+  	for ($i=0; $i<sizeof($articles); $i++) {
+  		$articles[$i]['images'] = $this->db->query("SELECT * FROM `article_images` WHERE `article_id`=" . $articles[$i]['id'])->result_array();
+  	}
+  	echo json_encode($articles);
+  }
+  
   public function add_article() {
     $title = $this->input->post('title');
     $content = $this->input->post('content');
-    $config = array(
-        'upload_path' => './userdata',
-        //'allowed_types' => "mp4|avi|ogg|flv|wmv|3gp",
-        'allowed_types' => "*",
-        'overwrite' => TRUE,
-        'max_size' => "2097152"
-        );
-        $this->load->library('upload', $config);
-        $this->upload->initialize($config);
-    if($this->upload->do_upload('file')) {
-      $this->db->insert('articles', array(
+    $fileCount = intval($this->input->post('file_count'));
+    $this->db->insert('articles', array(
         'title' => $title,
-        'content' => $content,
-        'img' => $this->upload->data()['file_name']
-      ));
-    } else {
-      echo json_encode($this->upload->display_errors());
+        'content' => $content
+    ));
+    $articleID = intval($this->db->insert_id());
+    for ($i=0; $i<$fileCount; $i++) {
+    	$config = array(
+	        'upload_path' => './userdata',
+	        //'allowed_types' => "mp4|avi|ogg|flv|wmv|3gp",
+	        'allowed_types' => "*",
+	        'overwrite' => TRUE,
+	        'max_size' => "2097152"
+	    );
+	    $this->load->library('upload', $config);
+	    $this->upload->initialize($config);
+	    if($this->upload->do_upload('file' . ($i+1))) {
+	    	$this->db->insert('article_images', array(
+	    		'article_id' => $articleID,
+	    		'img' => $this->upload->data()['file_name']
+	    	));
+	    }
+    }
+  }
+  
+  public function update_article() {
+    $articleID = intval($this->input->post('id'));
+    $title = $this->input->post('title');
+    $content = $this->input->post('content');
+    $fileCount = intval($this->input->post('file_count'));
+    $removedImages = json_decode($this->input->post('removed_images'), true);
+    $this->db->where('id', $articleID);
+    $this->db->update('articles', array(
+        'title' => $title,
+        'content' => $content
+    ));
+    for ($i=0; $i<$fileCount; $i++) {
+    	$config = array(
+	        'upload_path' => './userdata',
+	        //'allowed_types' => "mp4|avi|ogg|flv|wmv|3gp",
+	        'allowed_types' => "*",
+	        'overwrite' => TRUE,
+	        'max_size' => "2097152"
+	    );
+	    $this->load->library('upload', $config);
+	    $this->upload->initialize($config);
+	    if($this->upload->do_upload('file' . ($i+1))) {
+	    	$this->db->insert('article_images', array(
+	    		'article_id' => $articleID,
+	    		'img' => $this->upload->data()['file_name']
+	    	));
+	    }
+    }
+    for ($i=0; $i<sizeof($removedImages); $i++) {
+    	$path = $this->db->query("SELECT * FROM `article_images` WHERE `id`=" . $removedImages[$i])->row_array()['img'];
+    	if (file_exists("userdata/" . $path)) {
+    		unlink("userdata/" . $path);
+    	}
+    	$this->db->query('DELETE FROM `article_images` WHERE `id`=' . intval($removedImages[$i]));
     }
   }
   

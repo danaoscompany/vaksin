@@ -978,4 +978,11 @@ echo $this->email->print_debugger();
     $ads = $this->db->get('ads')->result_array();
     echo sizeof($ads);
   }
+  
+  public function get_article_by_id() {
+  	$id = intval($this->input->post('id'));
+  	$article = $this->db->query("SELECT * FROM `articles` WHERE `id`=" . $id)->row_array();
+  	$article['images'] = $this->db->query("SELECT * FROM `article_images` WHERE `article_id`=" . $id)->result_array();
+  	echo json_encode($article);
+  }
 }
