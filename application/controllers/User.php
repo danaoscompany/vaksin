@@ -990,4 +990,27 @@ echo $this->email->print_debugger();
   	$article['images'] = $this->db->query("SELECT * FROM `article_images` WHERE `article_id`=" . $id)->result_array();
   	echo json_encode($article);
   }
+  
+  public function upload_payment_proof() {
+  	$senderName = $this->input->post('sender_name');
+  	$senderAccount = $this->input->post('sender_account');
+  	$amount = intval($this->input->post('amount'));
+  	$config = array(
+        'upload_path' => './userdata',
+        'allowed_types' => "*",
+        'overwrite' => TRUE,
+        'max_size' => "2048000"
+        );
+    $this->load->library('upload', $config);
+    if ($this->upload->do_upload('file')) {
+    	$this->db->insert('payments', array(
+            'account_holder' => $senderName,
+            'account_number' => $senderAccount,
+            'amount' => $amount,
+            'payment_proof' => $this->upload->data()['file_name']
+        ));
+    } else {
+    	echo json_encode($this->upload->data()['file_name']);
+    }
+  }
 }
