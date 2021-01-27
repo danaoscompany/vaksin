@@ -1007,7 +1007,8 @@ echo $this->email->print_debugger();
             'account_holder' => $senderName,
             'account_number' => $senderAccount,
             'amount' => $amount,
-            'payment_proof' => $this->upload->data()['file_name']
+            'payment_proof' => $this->upload->data()['file_name'],
+            'status' => 'VERIFY'
         ));
     } else {
     	echo json_encode($this->upload->data()['file_name']);
