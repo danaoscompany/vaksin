@@ -992,6 +992,7 @@ echo $this->email->print_debugger();
   }
   
   public function upload_payment_proof() {
+  	$userID = intval($this->input->post('user_id'));
   	$senderName = $this->input->post('sender_name');
   	$senderAccount = $this->input->post('sender_account');
   	$bankName = $this->input->post('bank_name');
@@ -1006,6 +1007,7 @@ echo $this->email->print_debugger();
     $this->load->library('upload', $config);
     if ($this->upload->do_upload('file')) {
     	$this->db->insert('payments', array(
+    		'user_id' => $userID,
             'account_holder' => $senderName,
             'account_number' => $senderAccount,
             'bank_name' => $bankName,
