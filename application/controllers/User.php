@@ -994,7 +994,9 @@ echo $this->email->print_debugger();
   public function upload_payment_proof() {
   	$senderName = $this->input->post('sender_name');
   	$senderAccount = $this->input->post('sender_account');
+  	$bankName = $this->input->post('bank_name');
   	$amount = intval($this->input->post('amount'));
+  	$date = $this->input->post('date');
   	$config = array(
         'upload_path' => './userdata',
         'allowed_types' => "*",
@@ -1006,8 +1008,10 @@ echo $this->email->print_debugger();
     	$this->db->insert('payments', array(
             'account_holder' => $senderName,
             'account_number' => $senderAccount,
+            'bank_name' => $bankName,
             'amount' => $amount,
             'payment_proof' => $this->upload->data()['file_name'],
+            'date' => $date,
             'status' => 'VERIFY'
         ));
     } else {
