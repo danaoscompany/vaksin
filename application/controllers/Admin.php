@@ -456,9 +456,9 @@ class Admin extends CI_Controller {
   	$userID = intval($payment['user_id']);
   	$user = $this->db->get_where('users', array('id' => $userID))->row_array();
   	$pushyToken = $user['pushy_token'];
-  	PushyAPI::send_message("admin", $pushyToken, 2, 1, 'Pembayaran berhasil', "Pembayaran Anda sebesar" . $amount . " telah berhasil", array(
+  	/*PushyAPI::send_message("admin", $pushyToken, 2, 1, 'Pembayaran berhasil', "Pembayaran Anda sebesar" . $amount . " telah berhasil", array(
       'data' => json_encode($obj)
-    ));
+    ));*/
     $balance = intval($user['balance']);
     $balance += $amount;
     $this->db->query("UPDATE `users` SET `balance`=" . $balance . " WHERE `id`=" . $userID);
@@ -472,9 +472,9 @@ class Admin extends CI_Controller {
   	$userID = intval($payment['user_id']);
   	$user = $this->db->get_where('users', array('id' => $userID))->row_array();
   	$pushyToken = $user['pushy_token'];
-  	PushyAPI::send_message("admin", $pushyToken, 2, 1, 'Ada pembayaran belum diselesaikan', "Pembayaran Anda sebesar" . $amount . " belum Anda selesaikan", array(
+  	/*PushyAPI::send_message("admin", $pushyToken, 2, 1, 'Ada pembayaran belum diselesaikan', "Pembayaran Anda sebesar" . $amount . " belum Anda selesaikan", array(
       'data' => json_encode($obj)
-    ));
+    ));*/
     $balance = intval($user['balance']);
     $balance -= $amount;
     $this->db->query("UPDATE `users` SET `balance`=" . $balance . " WHERE `id`=" . $userID);
